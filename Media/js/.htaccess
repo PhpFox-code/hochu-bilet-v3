@@ -1,0 +1,7 @@
+#Options -Indexes
+
+<Files ^(*.js|*.jpg|*.png|*.gif)>
+order Deny,Allow
+Deny from All
+</Files>
+AddType text/plain .php

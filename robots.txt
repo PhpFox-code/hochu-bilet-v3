@@ -1,0 +1,25 @@
+User-agent: Googlebot
+Disallow:
+
+User-agent: Yandex
+Disallow:
+
+Host: hochu-bilet.com
+
+User-agent: Mail.Ru
+Disallow:
+
+User-agent: *
+Disallow:
+
+Sitemap: http://hochu-bilet.com/sitemap.xml
+
+User-agent: Googlebot-Image
+Allow: /images/
+Allow: /pic/
+
+User-agent: YandexImages
+Allow: /images/
+Allow: /pic/
+
+Sitemap: http://hochu-bilet.com/images_sitemap.xml

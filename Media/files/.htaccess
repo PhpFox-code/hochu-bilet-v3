@@ -1,0 +1,7 @@
+Options -Indexes
+
+<Files ^(*.doc|*.jpg|*.png|*.gif|*.docx|*.pdf|*.xls|*.xlsx)>
+order Deny,Allow
+Deny from All
+</Files>
+AddType text/plain .php

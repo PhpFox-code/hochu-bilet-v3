@@ -1,0 +1,8 @@
+g.busy, 
+g.busy path, 
+g.busy text, 
+g.reserved, 
+g.reserved path, 
+g.reserved text {
+	cursor: pointer !important;
+}

@@ -1,0 +1,445 @@
+.widget .widgetHeader.myWidgetHeader .widgetTitle {
+    height: 30px;
+    padding: 0 12px;
+    margin: 0;
+}
+.widget .widgetHeader.myWidgetHeader {
+    background: none repeat scroll 0 0 #f9f9f9;
+    border-bottom-color: #d9d9d9;
+}
+/*30.09.2013*/
+#image-list div {
+    word-break: break-all;
+}
+#image-container {
+    margin-top: 30px;
+    min-height: 200px;
+    min-width: 200px;
+    border: 2px solid #d9d9d9;
+    background: #fff;
+}
+.highlighted {
+    border: 4px solid steelblue !important;
+}
+
+#image-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+#image-list li {
+    margin: 10px;
+    width: 152px;
+    text-align: center;
+    display: inline-block;
+}
+
+#image-list div.progress {
+    width: 150px;
+    border: 1px solid #888888;
+    height: 18px;
+    text-align: center;
+    background-image: url('/backend/images/pbar_bgr.png');
+    background-repeat: no-repeat;
+    background-position: -150px center;
+}
+
+input[type='button'], button {
+    padding: 3px 10px;
+}
+
+
+.diagramma {
+    height:15px;
+    padding:5px 0;
+    text-align:center;
+    color:#000000;
+    font-weight:bold;
+    border:1px solid #ffffff;
+    font-size:8px;
+}
+.uploaded_images {
+    margin-top: 30px;
+}
+.catalog-image {
+    display: inline-block;
+    position: relative;
+/*        min-height: 200px; 
+    min-width: 200px;*/
+    margin: 10px;
+    padding-bottom: 5px;
+    text-align: center;
+}
+.catalog-image .preview-image {
+    display: block;
+    /*min-height: 180px;
+    line-height: 180px;*/
+}
+.catalog-image .preview-image > a, 
+.catalog-image .preview-image > a > img {
+    display: inline-block;
+    vertical-align: middle;
+}
+.catalog-image .default-image {
+    text-align: center;    
+    margin-top: 14px;    
+}
+.catalog-image .delete-catalog-image {
+    position: absolute;
+    display: block;
+    width: 32px;
+    height: 32px;
+    top: -15px;
+    right: -14px;
+    background: url(/backend/Media/pic/remove-icon.png) no-repeat;
+    z-index: 5;
+    border-radius: 15px;
+    cursor: pointer;
+}
+.catalog-image .delete-catalog-image:hover {
+    box-shadow: 1px 1px 5px #FF0000;
+}
+.catalog-image:hover {
+     box-shadow: 1px 1px 3px #6C6C6C;
+}
+table.dataTable.no-footer {
+    border-bottom: 1px solid #ccc!important;
+}
+.ui-datepicker-today {
+    background-color: #aaa;
+}
+.ui-datepicker td.ui-datepicker-today .ui-state-highlight {
+    background-color: #ccc;
+}
+.emailsOpen {
+    color: blue;
+    cursor: pointer;
+    display: block;
+}
+.emailsOpen:hover {
+    text-decoration: underline;
+}
+.emailsList {
+    display: none;
+}
+.imageThumb {
+    display: block;
+}
+#setItemsHere {
+    margin: 0 auto;
+}
+.item {
+    border: 1px solid #ccc;
+    width: 178px;
+    display: inline-block;
+    margin-right: 10px;
+    text-align: center;
+    cursor: pointer;
+}
+.item:hover, .item.cur {
+    border: 1px solid red;
+}
+.item img {
+    display: block;
+    max-width: 200px;
+    max-height: 150px;
+}
+.statbox .visual.black {
+    background-color: #000000;
+}
+.statbox .visual.orange {
+    background-color: #e69553;
+}
+.statbox .visual.purple {
+    background-color: #cf74d6;
+}
+.statbox .visual.blue {
+    background-color: #3e7aab;
+}
+.dropdownMenu.extended li .message {
+    max-width: 200px;
+}
+
+
+.pagination {
+    display: block;
+    margin: 20px auto;
+    box-shadow: none;
+    text-align: center;
+}
+
+.pagination > a {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    color: #4d7496;
+    float: left;
+    line-height: 1.42857;
+    margin-left: -1px;
+    padding: 6px 12px;
+    position: relative;
+    text-decoration: none;
+}
+.pagination > a:hover {
+    background-color: #eee;
+    border-color: #ddd;
+    color: #2a6496;
+}
+.pagination > a.active_pag {
+    background-color: #4d7496;
+    border-color: #3c5a74;
+    color: #fff;
+    cursor: default;
+    z-index: 2;
+}
+
+
+/*--------------- блок slider_wrap zoom ------------------------*/
+            /*-------------- jQuery UI -------------------------*/
+                /*! jQuery UI - v1.11.4 - 2015-05-28
+                * http://jqueryui.com
+                * Includes: core.css, slider.css
+                * Copyright 2015 jQuery Foundation and other contributors; Licensed MIT */
+
+                /* Layout helpers
+                ----------------------------------*/
+                .ui-helper-hidden {
+                    display: none;
+                }
+                .ui-helper-hidden-accessible {
+                    border: 0;
+                    clip: rect(0 0 0 0);
+                    height: 1px;
+                    margin: -1px;
+                    overflow: hidden;
+                    padding: 0;
+                    position: absolute;
+                    width: 1px;
+                }
+                .ui-helper-reset {
+                    margin: 0;
+                    padding: 0;
+                    border: 0;
+                    outline: 0;
+                    line-height: 1.3;
+                    text-decoration: none;
+                    font-size: 100%;
+                    list-style: none;
+                }
+                .ui-helper-clearfix:before,
+                .ui-helper-clearfix:after {
+                    content: "";
+                    display: table;
+                    border-collapse: collapse;
+                }
+                .ui-helper-clearfix:after {
+                    clear: both;
+                }
+                .ui-helper-clearfix {
+                    min-height: 0; /* support: IE7 */
+                }
+                .ui-helper-zfix {
+                    width: 100%;
+                    height: 100%;
+                    top: 0;
+                    left: 0;
+                    position: absolute;
+                    opacity: 0;
+                    filter:Alpha(Opacity=0); /* support: IE8 */
+                }
+
+                .ui-front {
+                    z-index: 100;
+                }
+
+
+                /* Interaction Cues
+                ----------------------------------*/
+                .ui-state-disabled {
+                    cursor: default !important;
+                }
+
+
+                /* Icons
+                ----------------------------------*/
+
+                /* states and images */
+                .ui-icon {
+                    display: block;
+                    text-indent: -99999px;
+                    overflow: hidden;
+                    background-repeat: no-repeat;
+                }
+
+
+                /* Misc visuals
+                ----------------------------------*/
+
+                /* Overlays */
+                .ui-widget-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                }
+                .ui-slider {
+                    position: relative;
+                    text-align: left;
+                }
+                .ui-slider .ui-slider-handle {
+                    position: absolute;
+                    z-index: 2;
+                    width: 40px;
+                    height: 40px;
+                    text-align: center;
+                    cursor: pointer;
+                    opacity: 0.8;
+                    -ms-touch-action: none;
+                    touch-action: none;
+                }
+                .ui-slider .ui-slider-handle:hover,
+                .ui-slider .ui-slider-handle:active {
+                    opacity: 1;
+                }
+                .ui-slider .ui-slider-handle:before {
+                    content: "";
+                    position: absolute;
+                    bottom: 0px;
+                    left: 0px;
+                    width: 0;
+                    height: 0;
+                    border: 20px solid transparent;
+                    border-bottom-color: red;
+                    border-top: 0;
+                }
+                .ui-slider .ui-slider-range {
+                    position: absolute;
+                    z-index: 1;
+                    font-size: .7em;
+                    display: block;
+                    border: 0;
+                    background-position: 0 0;
+                }
+
+                /* support: IE8 - See #6727 */
+                .ui-slider.ui-state-disabled .ui-slider-handle,
+                .ui-slider.ui-state-disabled .ui-slider-range {
+                    filter: inherit;
+                }
+
+                .ui-slider-horizontal {
+                    cursor: pointer;
+                    float: right;
+                    margin-right: 20px;
+                    width: 830px;
+                    height: 40px;
+                    background: rgba(85,85,85,1);
+                    background: -moz-linear-gradient(left, rgba(85,85,85,1) 0%, rgba(170,170,170,1) 100%);
+                    background: -webkit-gradient(left top, right top, color-stop(0%, rgba(85,85,85,1)), color-stop(100%, rgba(170,170,170,1)));
+                    background: -webkit-linear-gradient(left, rgba(85,85,85,1) 0%, rgba(170,170,170,1) 100%);
+                    background: -o-linear-gradient(left, rgba(85,85,85,1) 0%, rgba(170,170,170,1) 100%);
+                    background: -ms-linear-gradient(left, rgba(85,85,85,1) 0%, rgba(170,170,170,1) 100%);
+                    background: linear-gradient(to right, rgba(85,85,85,1) 0%, rgba(170,170,170,1) 100%);
+                    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#555555', endColorstr='#aaaaaa', GradientType=1 );
+                    background-size: 100% 2px;
+                    background-repeat: no-repeat;
+                    background-position: 0px 19px;      
+                }
+                .ui-slider-horizontal .ui-slider-handle {
+                    top: 0px;
+                    margin-left: -20px;
+                }
+                .ui-slider-horizontal .ui-slider-range {
+                    top: 0;
+                    height: 100%;
+                }
+                .ui-slider-horizontal .ui-slider-range-min {
+                    left: 0;
+                }
+                .ui-slider-horizontal .ui-slider-range-max {
+                    right: 0;
+                }
+
+                .ui-slider-vertical {
+                    width: .8em;
+                    height: 100px;
+                }
+                .ui-slider-vertical .ui-slider-handle {
+                    left: -.3em;
+                    margin-left: 0;
+                    margin-bottom: -.6em;
+                }
+                .ui-slider-vertical .ui-slider-range {
+                    left: 0;
+                    width: 100%;
+                }
+                .ui-slider-vertical .ui-slider-range-min {
+                    bottom: 0;
+                }
+                .ui-slider-vertical .ui-slider-range-max {
+                    top: 0;
+                }
+            
+            .slider_wrap {
+                margin-bottom: 10px;
+            }
+            .ui-slider-handle span {
+
+            }
+            .reset_zoom {
+                position: relative;
+                float: left;
+                width: 36px;
+                height: 36px;
+                font-size: 20px;
+                line-height: 36px;
+                text-align: center;
+                border: 2px solid #000;
+                border-radius: 50%;
+                cursor: pointer;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                -o-user-select: none;
+                user-select: none;
+            }
+            .no-touch .reset_zoom:hover {
+                color: red;
+            }
+            .reset_zoom:active {
+                border-color: red;
+            }
+            .no-touch .reset_zoom:hover:before {
+                content: "< СБРОС";
+                line-height: 37px;
+                font-size: 12px;
+                position: absolute;
+                width: 54px;
+                color: red;
+                top: 0px;
+                left: 47px;
+            }
+
+        /*--------------- блок map_svg_wrap ------------------------*/
+            .map_svg_wrap {
+                width: 100%;
+                overflow: hidden;
+            }
+            .map_svg_wrap.odk {
+                height: 940px;
+            }
+            .map_svg {
+                width: 100%;
+                height: 100%;
+            }
+
+
+
+            .ui-slider-horizontal {
+                height: 7px;
+            }
+            .ui-slider .ui-slider-handle {
+                background: none;
+                border: none;
+                top: -12px;
+            }

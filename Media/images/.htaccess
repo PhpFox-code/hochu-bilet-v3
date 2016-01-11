@@ -1,0 +1,5 @@
+<Files ^(*.jpeg|*.jpg|*.png|*.gif|*.bmp|*.swf)>
+order Deny,Allow
+Deny from All
+</Files>
+AddType text/plain .php
