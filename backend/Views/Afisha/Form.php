@@ -134,46 +134,49 @@
                     <div class="col-md-8"><input type="text" name="FORM[add_field]" value="<?php echo $obj->add_field ?>" class="form-control" /></div>
                 </div>
                 <br>
-                <div style="border: 2px solid #f7f7f8; padding 10px 0;">
-                    <h2>Печать</h2>
-                    <div class="rowSection">
-                        <div class="col-md-4" style="text-align: right">
-                            <button class="btn btn-primary" style="margin-left: 30px;" id="printPlace"
-                                <?php echo (Core\User::caccess() == 'edit'
-                                    OR Core\User::access()['afisha_print'] == 'edit') ? null : 'disabled'; ?>>Распечатать билет</button>
-                            <label class="checkerWrap-inline">
-                                <input name="print-type" value="base" type="radio" checked>Обычная</label>
-                            <label class="checkerWrap-inline">
-                                <input name="print-type" value="termo" type="radio">Термопринтер</label>
-                        </div>
-                        <div class="col-md-8">
-                            <input type="text" class="selected-seats" id="tag2" />
-                        </div>
-                    </div>
-                </div>
-                <div style="border: 2px solid #f7f7f8; padding 10px 0;">
-                    <h2>Бронь</h2>
-                    <div class="rowSection">
-                        <div class="col-md-4" style="text-align: right">
-                            <button class="btn btn-primary" style="margin-left: 30px;" id="orderPlace"
-                                <?php echo (Core\User::caccess() == 'edit'
-                                    OR Core\User::access()['afisha_brone'] == 'edit') ? null : 'disabled'; ?>>Забронировать</button>
-                        </div>
-                        <div class="col-md-8">
-                            <input type="text" class="selected-order-seats" id="tag2-2" />
+                <?php if (Core\User::caccess() == 'edit' OR Core\User::access()['afisha_print'] == 'edit'): ?>
+                    <div style="border: 2px solid #f7f7f8; padding 10px 0;">
+                        <h2>Печать</h2>
+                        <div class="rowSection">
+                            <div class="col-md-4" style="text-align: right">
+                                <button class="btn btn-primary" style="margin-left: 30px;" id="printPlace">Распечатать билет</button>
+                                <label class="checkerWrap-inline">
+                                    <input name="print-type" value="base" type="radio" checked>Обычная</label>
+                                <label class="checkerWrap-inline">
+                                    <input name="print-type" value="termo" type="radio">Термопринтер</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="selected-seats" id="tag2" />
+                            </div>
                         </div>
                     </div>
-                </div>
+                <?php endif; ?>
+                <?php if (Core\User::caccess() == 'edit' OR Core\User::access()['afisha_brone'] == 'edit'): ?>
+                    <div style="border: 2px solid #f7f7f8; padding 10px 0;">
+                        <h2>Бронь</h2>
+                        <div class="rowSection">
+                            <div class="col-md-4" style="text-align: right">
+                                <button class="btn btn-primary" style="margin-left: 30px;" id="orderPlace"
+                                    <?php echo (Core\User::caccess() == 'edit'
+                                        OR Core\User::access()['afisha_brone'] == 'edit') ? null : 'disabled'; ?>>Забронировать</button>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="selected-order-seats" id="tag2-2" />
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
                 
                 <h4>Цены</h4>
                 
                 <div>
                     <div style="display: inline-block; background: #01ff23; width: 20px; height: 20px;"></div> - Оплаченные
                 </div>
-                
-                <div>
-                    <button class="btn btn-primary" id="addPrice" <?php echo Core\User::caccess() != 'edit' ? 'disabled' : null; ?>>Добавить цену</button>
-                </div>
+                <?php if (Core\User::caccess() == 'edit'): ?>
+                    <div>
+                        <button class="btn btn-primary" id="addPrice" <?php echo Core\User::caccess() != 'edit' ? 'disabled' : null; ?>>Добавить цену</button>
+                    </div>
+                <?php endif; ?>
                 <!-- <div class="col-md-8">
                 </div> -->
                 <div class="prices-list" style="padding-bottom: 10px;">

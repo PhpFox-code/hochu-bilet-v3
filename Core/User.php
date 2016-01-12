@@ -29,7 +29,7 @@ class User {
             $this->_admin = true;
         }
         if( APPLICATION ) {
-            if($this->_admin && ($this->_info->role_id == 3 || $this->_info->role_id == 4)) {
+            if($this->_admin && ($this->_info->role_id == 3 || $this->_info->role_id == 4 || $this->_info->role_id == 2)) {
                 $this->_full_access = true;
             } else if( $this->_admin && $this->_info->role != 'user' ) {
                 $this->_access = $this->get_access($this->_info->role_id);

@@ -13,6 +13,7 @@
     use Core\Common;
     use Core\QB\DB;
     use Core\Pager\Pager;
+    use Core\User;
     use Modules\Afisha\Models\Map;
 
     class Afisha extends \Backend\Modules\Base {
@@ -308,7 +309,7 @@
 
         function printTicketAction()
         {
-            if (\Core\User::access()['afisha_print'] != 'edit') {
+            if (User::access()['afisha_print'] != 'edit') {
                 $this->no_access();
             }
             $key = Route::param('key');
@@ -420,6 +421,9 @@
 
         function createOrderAction()
         {
+            if (User::access()['afisha_brone'] != 'edit') {
+                $this->no_access();
+            }
             $key = Route::param('key');
             $keys = (array) explode(',', $key);
             $keys = array_filter($keys);
@@ -481,7 +485,8 @@
 
             $data = array(
                 'afisha_id' => $afisha->id,
-                'is_admin' => 1,
+                'is_admin' => User::info()->role_id == 2 ? 1 : 0,
+                'creator_id' => User::info()->id,
                 'seats_keys' => implode(',', $keys),
                 'created_at' => time(),
                 'status' => null     // Если нужно оформлять заказ сразу как оплаченый, нужно на 454 изменить значение

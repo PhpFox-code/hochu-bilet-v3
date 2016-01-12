@@ -13,6 +13,7 @@
     use Core\Dates;
     use Core\QB\DB;
     use Core\Pager\Pager;
+    use Core\User;
     use Modules\Afisha\Models\Map;
 
 
@@ -36,7 +37,7 @@
 
 
         function indexAction () {
-            $date_s = NULL; $date_po = NULL; $status = NULL; $eventId = null;
+            $date_s = NULL; $date_po = NULL; $status = NULL; $eventId = null; $creatorId = null;
 
             if ( Arr::get($_GET, 'date_s') ) { $date_s = strtotime( Arr::get($_GET, 'date_s') ); }
             if ( Arr::get($_GET, 'date_po') ) { $date_po = strtotime( Arr::get($_GET, 'date_po') ); }
@@ -47,43 +48,61 @@
             if (Arr::get($_GET, 'event') != 0) {
                 $eventId = Arr::get($_GET, 'event');
             }
+            if (Arr::get($_GET, 'creator_id') != 0) {
+                $creatorId = Arr::get($_GET, 'creator_id');
+            }
 
             $page = (int) Route::param('page') ? (int) Route::param('page') : 1;
             $count = DB::select(array(DB::expr('COUNT(id)'), 'count'))->from($this->tablename);
-            if( $date_s !== NULL ) { $count->where( 'created_at', '>=', $date_s ); }
-            if( $date_po !== NULL ) { $count->where( 'created_at', '<=', $date_po + 24 * 60 * 60 - 1 ); }
+            if( $date_s !== NULL ) { $count->where( $this->tablename.'.created_at', '>=', $date_s ); }
+            if( $date_po !== NULL ) { $count->where( $this->tablename.'.created_at', '<=', $date_po + 24 * 60 * 60 - 1 ); }
+            if (User::info()->role_id != 2) { $count->where($this->tablename.'.creator_id', '=', User::info()->id);}
             if( $status !== NULL ) { 
                 if ($status == 'null') {
-                    $count->where('status', 'IS', DB::expr('null'));
+                    $count->where($this->tablename.'.status', 'IS', DB::expr('null'));
                 }
                 else {
-                    $count->where( 'status', '=', $status );
+                    $count->where( $this->tablename.'.status', '=', $status );
                 }
             }
             if ($eventId) {
-                $count->where( 'afisha_id', '=', $eventId );
+                $count->where( $this->tablename.'.afisha_id', '=', $eventId );
+            }
+            if ($creatorId) {
+                $count->where( $this->tablename.'.creator_id', '=', $creatorId );
             }
             $count   = $count->count_all();
 
-            $result = DB::select()->from($this->tablename);
+            $result = DB::select($this->tablename.'.*', array('users.name', 'creator_name'))->from($this->tablename)
+                ->join('users', 'LEFT OUTER')
+                    ->on('users.id', '=', $this->tablename.'.creator_id');
 
-            if( $date_s ) { $result->where( 'created_at', '>=', $date_s ); }
-            if( $date_po ) { $result->where( 'created_at', '<=', $date_po + 24 * 60 * 60 - 1 ); }
+            if( $date_s ) { $result->where( $this->tablename.'.created_at', '>=', $date_s ); }
+            if( $date_po ) { $result->where( $this->tablename.'.created_at', '<=', $date_po + 24 * 60 * 60 - 1 ); }
+            if (User::info()->role_id != 2) { $result->where($this->tablename.'.creator_id', '=', User::info()->id);}
             if( $status !== NULL ) { 
                 if ($status == 'null') {
-                    $result->where('status', 'IS', DB::expr('null'));
+                    $result->where($this->tablename.'.status', 'IS', DB::expr('null'));
                 }
                 else {
-                    $result->where( 'status', '=', $status );
+                    $result->where( $this->tablename.'.status', '=', $status );
                 }
             }
             if ($eventId) {
-                $result->where( 'afisha_id', '=', $eventId );
+                $result->where( $this->tablename.'.afisha_id', '=', $eventId );
             }
-            $result = $result->order_by('created_at', 'DESC')->limit($this->limit)->offset(($page - 1) * $this->limit)->find_all();
+            if ($creatorId) {
+                $result->where( $this->tablename.'.creator_id', '=', $creatorId );
+            }
+
+            $result = $result->order_by($this->tablename.'.created_at', 'DESC')
+                ->limit($this->limit)->offset(($page - 1) * $this->limit)->find_all();
             $pager = Pager::factory( $page, $count, $this->limit )->create();
 
-            // $this->_toolbar = Widgets::get( 'Toolbar/List', array( ) );
+            $creators = array();
+            if (User::info()->role_id == 2) {
+                $creators = DB::select()->from('users')->where('status', '=', 1)->find_all();
+            }
 
             $this->_content = View::tpl(
                 array(
@@ -93,8 +112,10 @@
                     'date_s' => $date_s,
                     'date_po' => $date_po,
                     'pay_statuses' => $this->pay_statuses,
-                    'count' => DB::select(array(DB::expr('COUNT(id)'), 'count'))->from($this->tablename)->count_all(),
+                    'count' => $count,
+//                    'count' => DB::select(array(DB::expr('COUNT(id)'), 'count'))->from($this->tablename)->count_all(),
                     'events' => DB::select()->from('afisha')->where('place_id', 'IS NOT', null)->find_all(),
+                    'creators' => $creators,
                 ),$this->tpl_folder.'/Index');
         }
 
@@ -103,6 +124,11 @@
                 ->from($this->tablename)
                 ->where('id', '=', Route::param('id'))
                 ->find();
+
+//            Set edit access for myself orders
+            if ($result->creator_id == User::info()->id) {
+                User::factory()->_current_access = 'edit';
+            }
 
             $afisha = DB::select('afisha.*', array('places.name', 'place'), 'places.filename')
                 ->from('afisha')
@@ -314,6 +340,8 @@
                 
             $tickets = array();
             foreach ($seats as $seat) {
+                if (User::info()->role_id != 2 && User::access()['afisha_print_unlimit'] == 'edit'
+                    && strpos($order->printed_seats, $seat) !== false) continue;
                 $priceRow = DB::select('price')
                     ->from('prices')
                     ->join('seats', 'LEFT')
@@ -340,6 +368,25 @@
                     'barcode' => $afisha->id.'-'.$order->id.'-'.$seat,
                 ));
             }
+
+//            Update print seats keys
+            if (User::info()->role_id != 2 && User::access()['afisha_print_unlimit'] == 'edit') {
+                $oldSeats = $order->printed_seats;
+                $newSeats = array();
+                if (strlen($oldSeats)) {
+                    $oldSeats = explode(',', $oldSeats);
+                    if (count($oldSeats)) {
+                        $newSeats = (array) $oldSeats;
+                    }
+                }
+                foreach ($seats as $seat) {
+                    $newSeats[] = $seat;
+                }
+                $newSeats = array_unique($newSeats);
+                $newSeats = implode(',', $newSeats);
+                DB::update($this->tablename)->set(array('printed_seats' => $newSeats))->execute();
+            }
+
             if ($printType == 'base') {
                 echo View::tpl(array('tickets' => $tickets), 'Afisha_orders/Print');
             } else {

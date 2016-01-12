@@ -54,7 +54,7 @@
              $this->_access = User::caccess();
 
              if (in_array(Route::controller(), array('ajax', 'form'))
-                 OR in_array(Route::action(), array('printTicket', 'print'))) {
+                 OR in_array(Route::action(), array('printTicket', 'print', 'createOrder'))) {
                  return true;
              }
              if( $this->_access == 'no' ) {

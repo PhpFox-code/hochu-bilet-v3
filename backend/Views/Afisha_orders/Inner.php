@@ -202,7 +202,8 @@
 						<input type="text" class="form-control" id="tag2" value="<?php echo $obj->seats_keys ?>" />
 					</div>
 					<div class="col-md-3">
-						<button class="btn btn-primary" style="margin-top: 30px;" id="update_seats" type="button" <?php echo (Core\User::caccess() != 'edit') ? 'disabled' : null ?>>Сохранить изменения</button>
+						<button class="btn btn-primary" style="margin-top: 30px;" id="update_seats" type="button"
+							<?php echo (Core\User::caccess() != 'edit') ? 'disabled' : null ?>>Сохранить изменения</button>
 					</div>
 				</div>
 				<br>
@@ -219,13 +220,18 @@
 				<div class="widgetTitle"><i class="fa-print"></i>Печать билетов</div>
 			</div>
 			<div class="widgetContent">
-				<form action="<?php echo Core\HTML::link('backend/orders/print/'.$obj->id) ?>" method="post" target="_blank">
+				<form action="<?php echo Core\HTML::link('backend/orders/print/'.$obj->id) ?>" method="post" autocomplete="off">
 					<div class="form-group">
 						<?php $seats = array_filter(explode(',', $obj->seats_keys)); ?>
 						<?php if (count($seats)): ?>
 							<?php foreach ($seats as $seat): ?>
 								<label class="checkerWrap ckbxWrap">
-									<input name="SEATS[]" value="<?php echo $seat ?>" type="checkbox" checked>
+									<?php if (Core\User::info()->role_id != 2 && Core\User::access()['afisha_print_unlimit'] == 'edit'
+										&& strpos($obj->printed_seats, $seat) !== false): ?>
+										<input name="SEATS[]" value="<?php echo $seat ?>" type="checkbox" disabled="disabled">
+									<?php else: ?>
+										<input name="SEATS[]" value="<?php echo $seat ?>" type="checkbox" checked>
+									<?php endif; ?>
 									<span class=""><?php echo $seatsStr[$seat] ?></span>
 								</label>
 							<?php endforeach; ?>

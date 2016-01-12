@@ -42,7 +42,7 @@ return array(
         'name' => 'Бронировка билетов',
         'module' => 'afisha',
         'controller' => 'afisha_brone',
-        'view' => false,
+        'customView' => 'boolean',
     ),
     array(
         'name' => 'Распечатка билетов в афише',
@@ -88,7 +88,7 @@ return array(
         'controller' => 'contacts',
     ),
     array(
-        'name' => 'Бронирование билетов',
+        'name' => 'Бронирование билетов пользователей',
         'module' => 'brone',
         'controller' => 'brone',
     ),

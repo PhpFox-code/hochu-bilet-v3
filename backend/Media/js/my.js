@@ -51,6 +51,26 @@ $(document).ready(function(){
             }
         });
     }
+
+    var pickerInit = function( selector ) {
+        if(!$(selector).length) {
+            return false;
+        }
+        $(selector).each(function(){
+            var date = $(this).val();
+            $(this).datepicker({
+                showOtherMonths: true,
+                selectOtherMonths: false
+            });
+            $(this).datepicker('option', $.datepicker.regional['ru']);
+            var dateFormat = $(this).datepicker( "option", "dateFormat" );
+            $(this).datepicker( "option", "dateFormat", 'dd.mm.yy' );
+            $(this).val(date);
+        });
+    };
+    pickerInit('.fPicker');
+
+
     $('.setStatus').on('click', function(e){
         e.preventDefault();
         var it = $(this);

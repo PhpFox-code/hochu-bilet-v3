@@ -5,8 +5,8 @@
                 <div class="widgetTitle">
                     <div class="filter">
                         <form action="" method="get" accept-charset="utf-8">
-                            <div class="form-group" style="float: left; margin-right: 20px;">
-                                <label class="form-label">Мероприятие</label>
+                            <div style="display: inline-block;">
+                                <label class="control-label" style="display: block;">Мероприятие</label>
                                 <select name="event">
                                     <option value="0">Все</option>
                                     <?php foreach ($events as $key => $value): ?>
@@ -14,61 +14,86 @@
                                     <?php endforeach ?>
                                 </select>
                             </div>
-                            <input class="button btn-primary" style="float: left; margin-right: 20px;" type="submit" name="send" value="Поиск">
-                            <a href="/backend/orders/index" style="float: left;">
+                            <?php if (count($creators)): ?>
+                                <div style="display: inline-block;">
+                                    <label class="control-label" style="display: block;">Менеджер</label>
+                                    <select name="creator_id">
+                                        <option value="0">Все</option>
+                                        <?php foreach ($creators as $key => $value): ?>
+                                            <option value="<?php echo $value->id ?>" <?php echo $_GET['creator_id'] == $value->id ? 'selected' : '' ?>><?php echo $value->name ?></option>
+                                        <?php endforeach ?>
+                                    </select>
+                                </div>
+                            <?php endif; ?>
+                            <div style="display: inline-block;vertical-align: top;">
+                                <label class="control-label" style="display: block;">Дата от</label>
+                                <input name="date_s" class="form-control fPicker" value="<?php echo Core\Arr::get($_GET, 'date_s', NULL); ?>">
+                            </div>
+                            <div style="display: inline-block;vertical-align: top;">
+                                <label class="control-label" style="display: block;">Дата до</label>
+                                <input name="date_po" class="form-control fPicker" value="<?php echo Core\Arr::get($_GET, 'date_po', NULL); ?>">
+                            </div>
+                            <div style="display: inline-block;">
+                                <label class="control-label" style="display: block;">Статус</label>
+                                <select name="status">
+                                    <option value="">Все</option>
+                                    <option value="success" <?php echo $_GET['status'] == 'success' ? 'selected' : '' ?>>Оплачено</option>
+                                </select>
+                            </div>
+                            <input class="button btn-primary" style="display: inline-block;" type="submit" name="send" value="Поиск">
+                            <a href="/backend/orders/index" style="display: inline-block;">
                                 <i class="fa-refresh"></i>
                                 <span class="">Сбросить</span>
                             </a>
-                            <div class="clear"></div>
                         </form>
                     </div>
                     <i class="fa-reorder"></i>
                     <?php echo $pageName; ?>
                     <span class="label label-primary"><?php echo $count; ?></span>
                 </div>
-                <div class="toolbar no-padding" id="ordersToolbar" data-uri="<?php echo Core\Arr::get($_SERVER, 'REQUEST_URI'); ?>">
-                    <div class="btn-group">
-                        <li class="btn btn-xs">
-                            <a href="/backend/orders/index">
-                                <i class="fa-refresh"></i>
-                                <span class="hidden-xx">Сбросить</span>
-                            </a>
-                        </li>
-                        <span class="btn btn-xs dropdownToggle dropdownSelect">
-                             <i class="fa-filter"></i>
-                             <span class="current-item"><?php echo isset($_GET['status']) ? $pay_statuses[ Core\Arr::get($_GET, 'status', 0) ] : 'Все'; ?></span>
-                             <span class="caret"></span>
-                        </span>
-                        <ul class="dropdownMenu pull-right">
-                            <li>
-                                <a href="<?php echo Core\Support::generateLink('status', NULL); ?>">
-                                    <i class="fa-filter"></i>Все
-                                </a>
-                            </li>
-                            <li>
-                                <a href="<?php echo Core\Support::generateLink('status', 'null'); ?>">
-                                    <i class="fa-filter"></i>Не проведен
-                                </a>
-                            </li>
-                            <?php foreach ( $pay_statuses as $id => $name ): ?>
-                                <li>
-                                    <a href="<?php echo Core\Support::generateLink('status', $id); ?>">
-                                        <i class="fa-filter"></i><?php echo $name; ?>
-                                    </a>
-                                </li>    
-                            <?php endforeach ?>
-                        </ul>
-
-                        <li title="Выберите дату или период" class="range rangeOrderList btn btn-xs bs-tooltip">
-                            <a href="#">
-                                <i class="fa-calendar"></i>
-                                <span><?php echo Core\Support::getWidgetDatesRange(); ?></span>
-                                <i class="caret"></i>
-                            </a>
-                        </li>
-
-                    </div>
-                </div>
+<!--                <div class="toolbar no-padding" id="ordersToolbar" style="float: none;" data-uri="--><?php //echo Core\Arr::get($_SERVER, 'REQUEST_URI'); ?><!--">-->
+<!--                    <div class="btn-group">-->
+<!--                        <li class="btn btn-xs">-->
+<!--                            <a href="/backend/orders/index">-->
+<!--                                <i class="fa-refresh"></i>-->
+<!--                                <span class="hidden-xx">Сбросить</span>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                        <span class="btn btn-xs dropdownToggle dropdownSelect">-->
+<!--                             <i class="fa-filter"></i>-->
+<!--                             <span class="current-item">--><?php //echo isset($_GET['status']) ? $pay_statuses[ Core\Arr::get($_GET, 'status', 0) ] : 'Все'; ?><!--</span>-->
+<!--                             <span class="caret"></span>-->
+<!--                        </span>-->
+<!--                        <ul class="dropdownMenu pull-right">-->
+<!--                            <li>-->
+<!--                                <a href="--><?php //echo Core\Support::generateLink('status', NULL); ?><!--">-->
+<!--                                    <i class="fa-filter"></i>Все-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <a href="--><?php //echo Core\Support::generateLink('status', 'null'); ?><!--">-->
+<!--                                    <i class="fa-filter"></i>Не оплачен-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                            --><?php //foreach ( $pay_statuses as $id => $name ): ?>
+<!--                                <li>-->
+<!--                                    <a href="--><?php //echo Core\Support::generateLink('status', $id); ?><!--">-->
+<!--                                        <i class="fa-filter"></i>--><?php //echo $name; ?>
+<!--                                    </a>-->
+<!--                                </li>    -->
+<!--                            --><?php //endforeach ?>
+<!--                        </ul>-->
+<!---->
+<!--                        <li title="Выберите дату или период" class="range rangeOrderList btn btn-xs bs-tooltip">-->
+<!--                            <a href="#">-->
+<!--                                <i class="fa-calendar"></i>-->
+<!--                                <span>--><?php //echo Core\Support::getWidgetDatesRange(); ?><!--</span>-->
+<!--                                <i class="caret"></i>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!---->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
 
             <div class="widgetContent">
@@ -94,7 +119,15 @@
                             <?php foreach ( $result as $obj ): ?>
                                 <tr data-id="<?php echo $obj->id; ?>">
                                     <td class="hidden-ss"><a href="/backend/orders/edit/<?php echo $obj->id; ?>"><?php echo $obj->id; ?></a></td>
-                                    <td><?php echo $obj->is_admin ? '<b>Админ</b>' : $obj->name; ?></td>
+                                    <td>
+                                        <?php if($obj->is_admin): ?>
+                                            <b>Админ</b>
+                                        <?php elseif ($obj->creator_id): ?>
+                                            <b><?php echo $obj->creator_name; ?></b>
+                                        <?php else: ?>
+                                            <?php echo $obj->name; ?>
+                                        <?php endif; ?>
+                                    </td>
                                     <td><a href="tel:<?php echo $obj->phone; ?>"><?php echo $obj->phone; ?></a></td>
                                     <td><a href="mailto:<?php echo $obj->email; ?>"><?php echo $obj->email; ?></a></td>
                                     <td><?php echo $obj->admin_comment ?></td>
