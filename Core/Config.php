@@ -82,6 +82,11 @@
                 $this->setParameter( $tmp[0], $parameter );
                 unset($tmp[0]);
                 return $this->getRecursive($parameter, $tmp);
+            } else if( is_file(HOST.'/backend/Config/'.$tmp[0].'.php') ) {
+                $parameter = require_once HOST.'/backend/Config/'.$tmp[0].'.php';
+                $this->setParameter( $tmp[0], $parameter );
+                unset($tmp[0]);
+                return $this->getRecursive($parameter, $tmp);
             }
             // If wrong parameter name
             return NULL;
