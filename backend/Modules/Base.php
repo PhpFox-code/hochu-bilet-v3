@@ -10,7 +10,7 @@
     use Core\HTML;
     use Core\HTTP;
     use Core\QB\DB;
-    use Modules\User\Models\User;
+    use Core\User;
 
     class Base {
 
@@ -22,27 +22,57 @@
         protected $_filter = NULL;
         protected $_toolbar = NULL;
 
+        protected $_access = 'no';
 
         public function before() {
             User::factory()->is_remember();
-            $this->redirects();
+//            $this->redirects();
+            $cron = new Cron;
+            $cron->check();
             $this->config();
+//            $this->access();
         }
 
 
         public function after() {
-            $cron = new Cron;
-            $cron->check();
+
             $this->render();
         }
 
 
         private function redirects() {
-            if( !User::factory()->_admin AND Route::controller() != 'auth' AND Route::controller() != 'ajax' AND Route::controller() != 'form' ) {
+            if( !User::info()->role == 'user' AND Route::controller() != 'auth' AND Route::controller() != 'ajax' AND Route::controller() != 'form' ) {
                 HTTP::redirect('backend/auth/login');
             }
         }
 
+         public function access() {
+            if( !User::info() ) {
+                return false;
+            }
+            $this->_access = User::caccess();
+            if( $this->_access == 'no' ) {
+                $this->no_access();
+            }
+            if( $this->_access == 'view' && Route::action() != 'index' && Route::action() != 'edit' ) {
+                $this->no_access();
+            }
+        }
+
+        public function no_access() {
+            $this->_breadcrumbs = HTML::backendBreadcrumbs($this->_breadcrumbs);
+            $data = array();
+            foreach ($this as $key => $value) {
+                $data[$key] = $value;
+            }
+            $data['_seo']['h1'] = 'Ошибка';
+            $data['_content'] = \Core\Widgets::get('NoAccess');
+            ob_start();
+            extract($data, EXTR_SKIP);
+            include(HOST.APPLICATION.'/Views/Main.php');
+            echo ob_get_clean();
+            die;
+        }
 
         private function config() {
             $result = DB::select('key', 'zna')->from('config')->where('status', '=', 1)->find_all();

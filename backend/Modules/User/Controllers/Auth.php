@@ -2,7 +2,7 @@
     namespace Backend\Modules\User\Controllers;
 
     use Core\HTTP;
-    use Modules\User\Models\User;
+    use Core\User;
     use Core\Arr;
     use Core\Message;
     use Core\View;
@@ -66,12 +66,12 @@
                     'login' => Arr::get( $post, 'login' ),
                     'password' => User::factory()->hash_password( Arr::get( $post, 'new_password' ) ),
                 );
-                Common::update('users', $data)->where('id', '=', $user->id)->execute();
+                Common::factory('users')->update($data, $user->id);
                 Message::GetMessage( 1, 'Вы успешно изменили данные!' );
                 HTTP::redirect( 'backend/'.Route::controller().'/edit' );
             }
 
-            $this->_toolbar = Widgets::get( 'Toolbar/Edit' );
+            $this->_toolbar = Widgets::get( 'Toolbar/EditSaveOnly' );
             $this->_seo['h1'] = 'Мой профиль';
             $this->_seo['title'] = 'Редактирование личных данных';
             $this->setBreadcrumbs('Мой профиль', 'backend/'.Route::controller().'/'.Route::action());

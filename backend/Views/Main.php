@@ -16,7 +16,7 @@
                             <?php echo Core\Arr::get($_seo, 'h1'); ?>
                         </h3>
                         <span>
-                            Здравствуйте, <?php echo Modules\User\Models\User::info()->name; ?>!
+                            Здравствуйте, <?php echo Core\User::info()->name; ?>!
                         </span>
                     </div>
                     <?php echo $_toolbar; ?>

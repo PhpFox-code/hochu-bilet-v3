@@ -9,7 +9,7 @@
     use Core\View;
     use Core\Config;
     use Core\Files;
-    use Modules\User\Models\User;
+    use Core\User;
     
     class Ajax extends Base {
 
@@ -222,16 +222,15 @@
             $u = User::factory();
 
             $user = $u->get_user_if_isset( $login, $password, 1 );
-            if( !$user OR $user->role_id != 2 ) {
+            if( !$user OR $user->role == 'user' ) {
                 die(json_encode(array(
-                    'success' => false
+                    'msg' => 'Логин или пароль введены неверно!',
                 )));
             }
-
             $u->auth( $user, $remember );
 
             die(json_encode(array(
-                'success' => true
+                'success' => true,
             )));
         }
 

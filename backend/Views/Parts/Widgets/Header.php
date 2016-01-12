@@ -16,7 +16,7 @@
             <li class="dropdown dropdownMenuHidden">
                 <a class="dropdownToggle" href="#">
                     <i class="fa-male"></i>
-                    <span class="navText username"><?php echo Modules\User\Models\User::info()->name; ?></span>
+                    <span class="navText username"><?php echo Core\User::info()->name; ?></span>
                     <i class="fa-caret-down small"></i>
                 </a>
                 <ul class="dropdownMenu pull-right">
