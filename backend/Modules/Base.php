@@ -26,11 +26,11 @@
 
         public function before() {
             User::factory()->is_remember();
-//            $this->redirects();
+            $this->redirects();
             $cron = new Cron;
             $cron->check();
             $this->config();
-//            $this->access();
+            $this->access();
         }
 
 
