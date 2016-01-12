@@ -44,7 +44,7 @@
                     <textarea name="message" cols="40" rows="6" placeholder="Сообщение" data-rule-minlength="5" data-msg-minlength="Введите не менее 5 символов"></textarea>
                 </li>
                 <li>
-                    <button class="wSubmit" type="submit" name="action" value="brone">Заказать</button>
+                    <button class="wSubmit" type="submit" name="action" value="brone">Забронировать</button>
                     <button class="wSubmit" type="submit" name="action" value="payment">Оплатить</button>
                 </li>
             </ul>

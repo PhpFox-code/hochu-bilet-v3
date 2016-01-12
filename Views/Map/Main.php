@@ -26,7 +26,7 @@
     <p class="selected_sum">Сумма: <span>0</span> грн</p>
 </div>
 <div class="mapBtn">
-	<span class="wBtn mfi buyButton2" data-href="#orderDemo2" data-id="<?php echo $item->id ?>">Купить</span>
+	<span class="wBtn mfi buyButton2" data-href="#orderDemo2" data-id="<?php echo $item->id ?>">Оформить заказ</span>
 	<div class="empty_seat"></div>
 </div>		
 <div class="clear"></div>
