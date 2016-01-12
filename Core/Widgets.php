@@ -4,7 +4,7 @@
     use Plugins\Profiler\Profiler;
     use Core\QB\DB;
     use Modules\Cart\Models\Cart;
-    use Users;
+    use Core\User;
     use Modules\Catalog\Models\Filter;
     use Modules\Catalog\Models\Catalog;
 
@@ -346,10 +346,35 @@
         public function sidebarBackend( $array = array() ) {
             $result = DB::select()->from('menu')->where('status', '=', 1)->order_by('sort')->as_object()->execute();
             $arr = array();
-            foreach( $result AS $obj ) {
-                $arr[ $obj->id_parent ][] = $obj;
+            if( User::god() ) {
+                foreach( $result AS $obj ) {
+                    $arr[ $obj->id_parent ][] = $obj;
+                }
+            } else {
+                $access = User::access();
+                $_arr = array();
+                foreach( $result AS $obj ) {
+                    $r = explode('/', trim($obj->link, '/'));
+                    if( !$obj->link || Arr::get($access, $r[0], 'no') == 'edit' || (Arr::get($access, $r[0]) == 'view' && Arr::get($r, 1) == 'index') ) {
+                        $_arr[ $obj->id_parent ][] = $obj;
+                    } else if( !$obj->link || Arr::get($access, str_replace('seo_', '', $r[0]), 'no') == 'edit' || (Arr::get($access, str_replace('seo_', '', $r[0])) == 'view' && Arr::get($r, 1) == 'index') ) {
+                        $_arr[ $obj->id_parent ][] = $obj;
+                    }
+                }
+                $arr = array();
+                foreach( $_arr[0] AS $el ) {
+                    if( ($el->link || count(Arr::get($_arr, $el->id, array()))) ) {
+                        $arr[0][] = $el;
+                    }
+                }
+                foreach( $_arr AS $key => $el ) {
+                    if( $key != 0 ) {
+                        $arr[$key] = $el;
+                    }
+                }
             }
-            return $this->_data['sidebar'] = View::widget(array( 'result' => $arr ), 'Sidebar');
+
+            return $this->_data['sidebar'] = View::widget(array( 'result' => $arr, 'counts' => array() ), 'Sidebar');
         }
 
 
