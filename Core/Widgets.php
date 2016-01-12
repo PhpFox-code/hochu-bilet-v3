@@ -355,6 +355,9 @@
                 $_arr = array();
                 foreach( $result AS $obj ) {
                     $r = explode('/', trim($obj->link, '/'));
+                    if ($r[0] == 'seo') {
+                        array_splice($r, 0, 1);
+                    }
                     if( !$obj->link || Arr::get($access, $r[0], 'no') == 'edit' || (Arr::get($access, $r[0]) == 'view' && Arr::get($r, 1) == 'index') ) {
                         $_arr[ $obj->id_parent ][] = $obj;
                     } else if( !$obj->link || Arr::get($access, str_replace('seo_', '', $r[0]), 'no') == 'edit' || (Arr::get($access, str_replace('seo_', '', $r[0])) == 'view' && Arr::get($r, 1) == 'index') ) {

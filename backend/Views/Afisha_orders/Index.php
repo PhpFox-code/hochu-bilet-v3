@@ -15,7 +15,7 @@
                                 </select>
                             </div>
                             <input class="button btn-primary" style="float: left; margin-right: 20px;" type="submit" name="send" value="Поиск">
-                            <a href="/backend/afisha_orders/index" style="float: left;">
+                            <a href="/backend/orders/index" style="float: left;">
                                 <i class="fa-refresh"></i>
                                 <span class="">Сбросить</span>
                             </a>
@@ -29,7 +29,7 @@
                 <div class="toolbar no-padding" id="ordersToolbar" data-uri="<?php echo Core\Arr::get($_SERVER, 'REQUEST_URI'); ?>">
                     <div class="btn-group">
                         <li class="btn btn-xs">
-                            <a href="/backend/afisha_orders/index">
+                            <a href="/backend/orders/index">
                                 <i class="fa-refresh"></i>
                                 <span class="hidden-xx">Сбросить</span>
                             </a>
@@ -93,7 +93,7 @@
                         <tbody>
                             <?php foreach ( $result as $obj ): ?>
                                 <tr data-id="<?php echo $obj->id; ?>">
-                                    <td class="hidden-ss"><a href="/backend/afisha_orders/edit/<?php echo $obj->id; ?>"><?php echo $obj->id; ?></a></td>
+                                    <td class="hidden-ss"><a href="/backend/orders/edit/<?php echo $obj->id; ?>"><?php echo $obj->id; ?></a></td>
                                     <td><?php echo $obj->is_admin ? '<b>Админ</b>' : $obj->name; ?></td>
                                     <td><a href="tel:<?php echo $obj->phone; ?>"><?php echo $obj->phone; ?></a></td>
                                     <td><a href="mailto:<?php echo $obj->email; ?>"><?php echo $obj->email; ?></a></td>
@@ -123,13 +123,17 @@
                                             <li>
                                                 <a class="bs-tooltip dropdownToggle" href="javascript:void(0);" title="Управление"><i class="fa-cog size14"></i></a>
                                                 <ul class="dropdownMenu pull-right">
-                                                    <li>
-                                                        <a href="/backend/afisha_orders/edit/<?php echo $obj->id; ?>" title="Редактировать"><i class="fa-pencil"></i> Редактировать</a>
-                                                    </li>
-                                                    <li class="divider"></li>
-                                                    <li>
-                                                        <a onclick="return confirm('Это действие необратимо. Продолжить?');" href="/backend/afisha_orders/delete/<?php echo $obj->id; ?>" title="Удалить"><i class="fa-trash-o text-danger"></i> Удалить</a>
-                                                    </li>
+                                                    <?php if(Core\User::caccess() == 'edit' OR Core\User::caccess() == 'view'): ?>
+                                                        <li>
+                                                            <a href="/backend/orders/edit/<?php echo $obj->id; ?>" title="Редактировать"><i class="fa-pencil"></i> Редактировать</a>
+                                                        </li>
+                                                    <?php endif; ?>
+                                                    <?php if(Core\User::caccess() == 'edit'): ?>
+                                                        <li class="divider"></li>
+                                                        <li>
+                                                            <a onclick="return confirm('Это действие необратимо. Продолжить?');" href="/backend/orders/delete/<?php echo $obj->id; ?>" title="Удалить"><i class="fa-trash-o text-danger"></i> Удалить</a>
+                                                        </li>
+                                                    <?php endif; ?>
                                                 </ul>
                                             </li>
                                         </ul>

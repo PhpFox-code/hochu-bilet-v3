@@ -47,16 +47,21 @@
         }
 
          public function access() {
-            if( !User::info() ) {
+             if( !User::info() ) {
                 return false;
-            }
-            $this->_access = User::caccess();
-            if( $this->_access == 'no' ) {
-                $this->no_access();
-            }
-            if( $this->_access == 'view' && Route::action() != 'index' && Route::action() != 'edit' ) {
-                $this->no_access();
-            }
+             }
+
+             $this->_access = User::caccess();
+
+             if (Route::controller() == 'ajax' OR Route::controller() == 'form') {
+                 return true;
+             }
+             if( $this->_access == 'no' ) {
+                 $this->no_access();
+             }
+             if( $this->_access == 'view' && Route::action() != 'index' && Route::action() != 'edit' ) {
+                 $this->no_access();
+             }
         }
 
         public function no_access() {

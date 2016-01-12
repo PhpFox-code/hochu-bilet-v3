@@ -20,7 +20,7 @@
                                 <?php echo $obj->name; ?>
                                 <i class="arrow fa-angle-right"></i>
                             </a>
-                            <ul class="subMenu" <?php echo $check ? 'style="height:'.(count($result[$obj->id]) * 29).'px;"' : NULL; ?>>
+                            <ul class="subMenu" <?php echo $check ? 'style="height:'.(count($result[$obj->id]) * 43).'px;"' : NULL; ?>>
                                 <?php foreach ( $result[ $obj->id ] as $_obj ): ?>
                                     <?php $check = false; ?>
                                     <?php if( $arr[1].'/'.$arr[2] == $_obj->link || (!isset($arr[2]) && $arr[1].'/index' == $_obj->link) || ($arr[2] == 'edit' && $arr[1].'/index' == $_obj->link) ): ?>

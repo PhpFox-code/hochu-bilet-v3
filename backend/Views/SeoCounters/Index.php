@@ -25,13 +25,17 @@
                                     <li>
                                         <a title="Управление" href="javascript:void(0);" class="bs-tooltip dropdownToggle"><i class="fa-cog"></i> </a>
                                         <ul class="dropdownMenu pull-right">
-                                            <li>
-                                                <a title="Редактировать" href="<?php echo '/backend/seo/counters/edit/'.$obj->id; ?>"><i class="fa-pencil"></i> Редактировать</a>
-                                            </li>
-                                            <li class="divider"></li>
-                                            <li>
-                                                <a title="Удалить" onclick="return confirm('Это действие необратимо. Продолжить?');" href="<?php echo '/backend/seo/counters/delete/'.$obj->id; ?>"><i class="fa-trash-o text-danger"></i> Удалить</a>
-                                            </li>
+                                            <?php if(Core\User::caccess() == 'edit' OR Core\User::caccess() == 'view'): ?>
+                                                <li>
+                                                    <a title="Редактировать" href="<?php echo '/backend/seo/counters/edit/'.$obj->id; ?>"><i class="fa-pencil"></i> Редактировать</a>
+                                                </li>
+                                            <?php endif; ?>
+                                            <?php if(Core\User::caccess() == 'edit'): ?>
+                                                <li class="divider"></li>
+                                                <li>
+                                                    <a title="Удалить" onclick="return confirm('Это действие необратимо. Продолжить?');" href="<?php echo '/backend/seo/counters/delete/'.$obj->id; ?>"><i class="fa-trash-o text-danger"></i> Удалить</a>
+                                                </li>
+                                            <?php endif; ?>
                                         </ul>
                                     </li>
                                 </ul>

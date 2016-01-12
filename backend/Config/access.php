@@ -16,6 +16,7 @@ return array(
         'name' => 'Системные страницы',
         'module' => 'content',
         'controller' => 'control',
+        'view' => false,
     ),
     array(
         'name' => 'Меню',
@@ -45,7 +46,7 @@ return array(
     array(
         'name' => 'Заказы',
         'module' => 'afisha',
-        'controller' => 'afisha_orders',
+        'controller' => 'orders',
     ),
     array(
         'name' => 'Подписчики на рассылку писем',
@@ -68,7 +69,7 @@ return array(
         'controller' => 'brone',
     ),
     array(
-        'name' => 'заказы звонка',
+        'name' => 'Заказы звонка',
         'module' => 'contact',
         'controller' => 'callback',
     ),
@@ -76,6 +77,7 @@ return array(
         'name' => 'Лента событий',
         'module' => 'log',
         'controller' => 'log',
+        'edit' => false,
     ),
     array(
         'name' => 'Шаблоны писем',
@@ -86,18 +88,27 @@ return array(
         'name' => 'Настройки сайта',
         'module' => 'config',
         'controller' => 'config',
+        'view' => false,
     ),
     array(
-        'name' => 'СЕО. Шаблоны',
+        'name' => 'СЕО. Шаблон афиши',
         'module' => 'seo',
         'controller' => 'templates',
+        'view' => false,
     ),
     array(
         'name' => 'СЕО. Теги для конкретных ссылок',
+        'module' => 'seo',
         'controller' => 'links',
     ),
     array(
-        'name' => 'СЕО. Метрика и счетчики',
-        'controller' => 'scripts',
+        'name' => 'СЕО. Метрика',
+        'module' => 'seo',
+        'controller' => 'metrika',
+    ),
+    array(
+        'name' => 'СЕО. Счетчики',
+        'module' => 'seo',
+        'controller' => 'counters',
     ),
 );

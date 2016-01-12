@@ -22,13 +22,17 @@
                                 <li>
                                     <a title="Управление" class="bs-tooltip dropdownToggle" href="javascript:void(0);"><i class="fa-cog size14"></i></a>
                                     <ul class="dropdownMenu pull-right">
-                                        <li>
-                                            <a title="Редактировать" href="/backend/<?php echo Core\Route::controller(); ?>/edit/<?php echo $obj->id; ?>"><i class="fa-pencil"></i> Редактировать</a>
-                                        </li>
-                                        <li class="divider"></li>
-                                        <li>
-                                            <a title="Удалить" onclick="return confirm('Это действие необратимо. Продолжить?');" href="/backend/<?php echo Core\Route::controller(); ?>/delete/<?php echo $obj->id; ?>"><i class="fa-trash-o text-danger"></i> Удалить</a>
-                                        </li>
+                                        <?php if(Core\User::caccess() == 'edit' OR Core\User::caccess() == 'view'): ?>
+                                            <li>
+                                                <a title="Редактировать" href="/backend/<?php echo Core\Route::controller(); ?>/edit/<?php echo $obj->id; ?>"><i class="fa-pencil"></i> Редактировать</a>
+                                            </li>
+                                        <?php endif; ?>
+                                        <?php if(Core\User::caccess() == 'edit'): ?>
+                                            <li class="divider"></li>
+                                            <li>
+                                                <a title="Удалить" onclick="return confirm('Это действие необратимо. Продолжить?');" href="/backend/<?php echo Core\Route::controller(); ?>/delete/<?php echo $obj->id; ?>"><i class="fa-trash-o text-danger"></i> Удалить</a>
+                                            </li>
+                                        <?php endif; ?>
                                     </ul>
                                 </li>
                             </ul>

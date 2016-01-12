@@ -11,8 +11,13 @@
             <i class="fa-bars"></i>
         </a>
         <ul class="navbarNav">
-            <?php echo Core\Widgets::get('headerNew'); ?>
-            <?php echo Core\Widgets::get('headerContacts'); ?>
+            <?php $access = \Core\User::access(); ?>
+            <?php if( \Core\User::god() || (isset($access['contacts']) && $access['log'] != 'no') ): ?>
+                <?php echo Core\Widgets::get('headerNew'); ?>
+            <?php endif; ?>
+            <?php if( \Core\User::god() || (isset($access['contacts']) && $access['contacts'] != 'no') ): ?>
+                <?php echo Core\Widgets::get('headerContacts'); ?>
+            <?php endif; ?>
             <li class="dropdown dropdownMenuHidden">
                 <a class="dropdownToggle" href="#">
                     <i class="fa-male"></i>

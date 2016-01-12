@@ -221,4 +221,9 @@
             return $cookie;
         }
 
+        public static function setArray($name, $array, $lifetime = NULL) {
+            $value = json_encode($array);
+            $value = base64_encode($value);
+            return static::set($name, $value, $lifetime);
+        }
     }

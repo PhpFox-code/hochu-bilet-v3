@@ -1,6 +1,8 @@
 <div class="toolbar no-padding">
     <div class="btn-group">
-        <a title="Сохранить" href="#" class="btn btn-lg text-success bs-tooltip btn-save"><i class="fa-check"></i> <span class="hidden-xx">Сохранить</span></a>
+        <?php if( Core\User::caccess() == 'edit' ): ?>
+            <a title="Сохранить" href="#" class="btn btn-lg text-success bs-tooltip btn-save"><i class="fa-check"></i> <span class="hidden-xx">Сохранить</span></a>
+        <?php endif; ?>
     </div>
 </div>
 

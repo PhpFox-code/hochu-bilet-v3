@@ -63,22 +63,24 @@
             </div>
         </div>
     </div> -->
-    <div class="col-sm-6 col-md-3">
-        <div class="statbox widget box box-shadow">
-            <div class="widgetContent">
-                <div class="visual purple">
-                    <i class="fa-envelope-o"></i>
+    <?php if (Core\User::access()['subscribers'] != 'no'): ?>
+        <div class="col-sm-6 col-md-3">
+            <div class="statbox widget box box-shadow">
+                <div class="widgetContent">
+                    <div class="visual purple">
+                        <i class="fa-envelope-o"></i>
+                    </div>
+                    <div class="title">
+                        Подписчики
+                    </div>
+                    <div class="value">
+                        <?php echo $count_subscribers; ?>
+                    </div>
+                    <a href="/backend/subscribers/index" class="more">Подробнее <i class="pull-right fa-angle-right"></i></a>
                 </div>
-                <div class="title">
-                    Подписчики
-                </div>
-                <div class="value">
-                    <?php echo $count_subscribers; ?>
-                </div>
-                <a href="/backend/subscribers/index" class="more">Подробнее <i class="pull-right fa-angle-right"></i></a>
             </div>
         </div>
-    </div>
+    <?php endif; ?>
 <!--     <div class="col-sm-6 col-md-3">
         <div class="statbox widget box box-shadow">
             <div class="widgetContent">
@@ -111,20 +113,22 @@
             </div>
         </div>
     </div> -->
-    <div class="col-sm-6 col-md-3">
-        <div class="statbox widget box box-shadow">
-            <div class="widgetContent">
-                <div class="visual orange">
-                    <i class="fa-puzzle-piece"></i>
+    <?php if (Core\User::access()['banners'] != 'no'): ?>
+        <div class="col-sm-6 col-md-3">
+            <div class="statbox widget box box-shadow">
+                <div class="widgetContent">
+                    <div class="visual orange">
+                        <i class="fa-puzzle-piece"></i>
+                    </div>
+                    <div class="title">
+                        Банера
+                    </div>
+                    <div class="value">
+                        <?php echo $count_banners; ?>
+                    </div>
+                    <a href="/backend/banners/index" class="more">Подробнее <i class="pull-right fa-angle-right"></i></a>
                 </div>
-                <div class="title">
-                    Банера
-                </div>
-                <div class="value">
-                    <?php echo $count_banners; ?>
-                </div>
-                <a href="/backend/banners/index" class="more">Подробнее <i class="pull-right fa-angle-right"></i></a>
             </div>
         </div>
-    </div>
+    <?php endif; ?>
 </div>

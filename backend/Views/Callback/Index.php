@@ -77,34 +77,47 @@
                                     <td><?php echo $obj->ip; ?></td>
                                     <td><?php echo $obj->created_at ? date( 'd.m.Y', $obj->created_at ) : '----'; ?></td>
                                     <td width="45" valign="top" class="icon-column status-column">
-                                        <a
-                                            data-pub="<b>Отметить как непрочитанное</b><br>Прочитано"
-                                            data-unpub="<b>Отметить как прочитано</b><br>Не прочитано"
-                                            title="<?php echo $obj->status == 1 ? '<b>Отметить как непрочитанное</b><br>Прочитано' : '<b>Отметить как прочитано</b><br>Не прочитано'; ?>" 
-                                            data-status="<?php echo $obj->status; ?>" 
-                                            data-id="<?php echo $obj->id; ?>"
-                                            href="#" 
-                                            class="setStatus bs-tooltip btn btn-xs <?php echo $obj->status == 1 ? 'btn-success' : 'btn-danger' ?>"
-                                        >
+                                        <?php if( \Core\User::caccess() != 'edit' ): ?>
                                             <?php if ($obj->status == 1): ?>
-                                                <i class="fa-check"></i>
+                                                <i class="fa-check green"></i>
                                             <?php else: ?>
-                                                <i class="fa-dot-circle-o"></i>
-                                            <?php endif ?>
-                                        </a>
+                                                <i class="fa-dot-circle-o red"></i>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
+                                        <?php if( \Core\User::caccess() == 'edit' ): ?>
+                                            <a
+                                                data-pub="<b>Отметить как непрочитанное</b><br>Прочитано"
+                                                data-unpub="<b>Отметить как прочитано</b><br>Не прочитано"
+                                                title="<?php echo $obj->status == 1 ? '<b>Отметить как непрочитанное</b><br>Прочитано' : '<b>Отметить как прочитано</b><br>Не прочитано'; ?>"
+                                                data-status="<?php echo $obj->status; ?>"
+                                                data-id="<?php echo $obj->id; ?>"
+                                                href="#"
+                                                class="setStatus bs-tooltip btn btn-xs <?php echo $obj->status == 1 ? 'btn-success' : 'btn-danger' ?>"
+                                            >
+                                                <?php if ($obj->status == 1): ?>
+                                                    <i class="fa-check"></i>
+                                                <?php else: ?>
+                                                    <i class="fa-dot-circle-o"></i>
+                                                <?php endif ?>
+                                            </a>
+                                        <?php endif; ?>
                                     </td>
                                     <td class="nav-column">
                                         <ul class="table-controls">
                                             <li>
                                                 <a class="bs-tooltip dropdownToggle" href="javascript:void(0);" title="Управление"><i class="fa-cog size14"></i></a>
                                                 <ul class="dropdownMenu pull-right">
-                                                    <li>
-                                                        <a href="/backend/<?php echo Core\Route::controller(); ?>/edit/<?php echo $obj->id; ?>" title="Редактировать"><i class="fa-pencil"></i> Редактировать</a>
-                                                    </li>
-                                                    <li class="divider"></li>
-                                                    <li>
-                                                        <a onclick="return confirm('Это действие необратимо. Продолжить?');" href="/backend/<?php echo Core\Route::controller(); ?>/delete/<?php echo $obj->id; ?>" title="Удалить"><i class="fa-trash-o text-danger"></i> Удалить</a>
-                                                    </li>
+                                                    <?php if(Core\User::caccess() == 'edit' OR Core\User::caccess() == 'view'): ?>
+                                                        <li>
+                                                            <a href="/backend/<?php echo Core\Route::controller(); ?>/edit/<?php echo $obj->id; ?>" title="Редактировать"><i class="fa-pencil"></i> Редактировать</a>
+                                                        </li>
+                                                    <?php endif; ?>
+                                                    <?php if(Core\User::caccess() == 'edit'): ?>
+                                                        <li class="divider"></li>
+                                                        <li>
+                                                            <a onclick="return confirm('Это действие необратимо. Продолжить?');" href="/backend/<?php echo Core\Route::controller(); ?>/delete/<?php echo $obj->id; ?>" title="Удалить"><i class="fa-trash-o text-danger"></i> Удалить</a>
+                                                        </li>
+                                                    <?php endif; ?>
                                                 </ul>
                                             </li>
                                         </ul>

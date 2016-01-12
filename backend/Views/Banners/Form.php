@@ -65,7 +65,9 @@
                                     <img src="<?php echo Core\HTML::media('images/banners/'.$obj->image); ?>" />
                                 </a>
                                 <br />
-                                <a href="/backend/<?php echo Core\Route::controller(); ?>/delete_image/<?php echo $obj->id; ?>">Удалить изображение</a>
+                                <?php if(Core\User::caccess() == 'edit'): ?>
+                                    <a href="/backend/<?php echo Core\Route::controller(); ?>/delete_image/<?php echo $obj->id; ?>">Удалить изображение</a>
+                                <?php endif; ?>
                             <?php else: ?>
                                 <input type="file" name="file" />
                             <?php endif ?>

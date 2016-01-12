@@ -32,7 +32,10 @@
 		<div class="widget">
 			<div class="widgetHeader">
 				<div class="widgetTitle"><i class="fa-credit-card"></i>Заказ <span class="label label-primary">№ <?php echo $obj->id; ?></span></div>
-				<a onclick="return confirm('Это действие необратимо. Продолжить?');" href="/backend/afisha_orders/delete/<?php echo $obj->id; ?>" title="Удалить текущий заказ"><i class="fa-trash-o"></i> Удалить текущий заказ</a>
+				<?php if (Core\User::caccess() == 'edit'): ?>
+					<a onclick="return confirm('Это действие необратимо. Продолжить?');" href="/backend/orders/delete/<?php echo $obj->id; ?>" title="Удалить текущий заказ" >
+						<i class="fa-trash-o"></i> Удалить текущий заказ</a>
+				<?php endif; ?>
 			</div>
 			<div class="widgetContent">
 				<div class="widget box">
@@ -50,7 +53,7 @@
 										</select>
 										<span class="input-group-btn">
 											<div class="col-md-12">
-											<button class="btn btn-primary" id="update_order_status" type="button">Обновить</button>
+											<button class="btn btn-primary" id="update_order_status" type="button" <?php echo (Core\User::caccess() != 'edit') ? 'disabled' : null ?>>Обновить</button>
 											</div>
 										</span>
 									</div>
@@ -140,7 +143,7 @@
 							</div>
 						</div>
 						<div class="form-actions textright">
-							<button class="btn btn-primary" type="button" id="update_admin_comment">Обновить</button>
+							<button class="btn btn-primary" type="button" id="update_admin_comment" <?php echo (Core\User::caccess() != 'edit') ? 'disabled' : null ?>>Обновить</button>
 						</div>
 					</form>				
 				</div>
@@ -172,7 +175,7 @@
 							</div>
 						</div>
 						<div class="form-actions textright">
-							<button class="btn btn-primary" type="button" id="update_user_info">Обновить</button>
+							<button class="btn btn-primary" type="button" id="update_user_info" <?php echo (Core\User::caccess() != 'edit') ? 'disabled' : null ?>>Обновить</button>
 						</div>
 					</form>				
 				</div>
@@ -199,7 +202,7 @@
 						<input type="text" class="form-control" id="tag2" value="<?php echo $obj->seats_keys ?>" />
 					</div>
 					<div class="col-md-3">
-						<button class="btn btn-primary" style="margin-top: 30px;" id="update_seats" type="button">Сохранить изменения</button>
+						<button class="btn btn-primary" style="margin-top: 30px;" id="update_seats" type="button" <?php echo (Core\User::caccess() != 'edit') ? 'disabled' : null ?>>Сохранить изменения</button>
 					</div>
 				</div>
 				<br>
@@ -216,7 +219,7 @@
 				<div class="widgetTitle"><i class="fa-print"></i>Печать билетов</div>
 			</div>
 			<div class="widgetContent">
-				<form action="<?php echo Core\HTML::link('backend/afisha_orders/print/'.$obj->id) ?>" method="post" target="_blank">
+				<form action="<?php echo Core\HTML::link('backend/orders/print/'.$obj->id) ?>" method="post" target="_blank">
 					<div class="form-group">
 						<?php $seats = array_filter(explode(',', $obj->seats_keys)); ?>
 						<?php if (count($seats)): ?>
@@ -233,7 +236,7 @@
 							<input name="print-type" value="base" type="radio" checked>Обычная</label>
 						<label class="checkerWrap-inline">
 							<input name="print-type" value="termo" type="radio">Термопринтер</label>
-						<input class="btn btn-primary" type="submit" value="Печать" />
+						<input class="btn btn-primary" type="submit" value="Печать" <?php echo (Core\User::caccess() != 'edit') ? 'disabled' : null ?> />
 					</div>
 				</form>
 			</div>
