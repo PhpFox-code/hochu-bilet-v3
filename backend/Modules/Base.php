@@ -53,7 +53,8 @@
 
              $this->_access = User::caccess();
 
-             if (Route::controller() == 'ajax' OR Route::controller() == 'form') {
+             if (in_array(Route::controller(), array('ajax', 'form'))
+                 OR in_array(Route::action(), array('printTicket', 'print'))) {
                  return true;
              }
              if( $this->_access == 'no' ) {

@@ -308,6 +308,9 @@
 
         function printTicketAction()
         {
+            if (\Core\User::access()['afisha_print'] != 'edit') {
+                $this->no_access();
+            }
             $key = Route::param('key');
             $keys = (array) explode(',', $key);
             if (count($keys) == 0) {

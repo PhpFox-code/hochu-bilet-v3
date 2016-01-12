@@ -39,6 +39,30 @@ return array(
         'controller' => 'afisha',
     ),
     array(
+        'name' => 'Бронировка билетов',
+        'module' => 'afisha',
+        'controller' => 'afisha_brone',
+        'view' => false,
+    ),
+    array(
+        'name' => 'Распечатка билетов в афише',
+        'module' => 'afisha',
+        'controller' => 'afisha_print',
+        'customView' => 'boolean',
+    ),
+    array(
+        'name' => 'Распечатка билетов в заказе',
+        'module' => 'afisha',
+        'controller' => 'order_print',
+        'customView' => 'boolean',
+    ),
+    array(
+        'name' => 'Ограниченное кол-во печатей (1)',
+        'module' => 'afisha',
+        'controller' => 'afisha_print_unlimit',
+        'customView' => 'boolean',
+    ),
+    array(
         'name' => 'Города',
         'module' => 'cities',
         'controller' => 'cities',

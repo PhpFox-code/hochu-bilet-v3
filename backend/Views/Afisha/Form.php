@@ -138,7 +138,9 @@
                     <h2>Печать</h2>
                     <div class="rowSection">
                         <div class="col-md-4" style="text-align: right">
-                            <button class="btn btn-primary" style="margin-left: 30px;" id="printPlace" <?php echo Core\User::caccess() != 'edit' ? 'disabled' : null; ?>>Распечатать билет</button>
+                            <button class="btn btn-primary" style="margin-left: 30px;" id="printPlace"
+                                <?php echo (Core\User::caccess() == 'edit'
+                                    OR Core\User::access()['afisha_print'] == 'edit') ? null : 'disabled'; ?>>Распечатать билет</button>
                             <label class="checkerWrap-inline">
                                 <input name="print-type" value="base" type="radio" checked>Обычная</label>
                             <label class="checkerWrap-inline">
@@ -153,7 +155,9 @@
                     <h2>Бронь</h2>
                     <div class="rowSection">
                         <div class="col-md-4" style="text-align: right">
-                            <button class="btn btn-primary" style="margin-left: 30px;" id="orderPlace" <?php echo Core\User::caccess() != 'edit' ? 'disabled' : null; ?>>Забронировать</button>
+                            <button class="btn btn-primary" style="margin-left: 30px;" id="orderPlace"
+                                <?php echo (Core\User::caccess() == 'edit'
+                                    OR Core\User::access()['afisha_brone'] == 'edit') ? null : 'disabled'; ?>>Забронировать</button>
                         </div>
                         <div class="col-md-8">
                             <input type="text" class="selected-order-seats" id="tag2-2" />

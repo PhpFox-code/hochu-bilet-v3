@@ -236,7 +236,9 @@
 							<input name="print-type" value="base" type="radio" checked>Обычная</label>
 						<label class="checkerWrap-inline">
 							<input name="print-type" value="termo" type="radio">Термопринтер</label>
-						<input class="btn btn-primary" type="submit" value="Печать" <?php echo (Core\User::caccess() != 'edit') ? 'disabled' : null ?> />
+						<input class="btn btn-primary" type="submit" value="Печать"
+							<?php echo (Core\User::caccess() == 'edit'
+								OR  Core\User::access()['order_print'] == 'edit') ? null : 'disabled' ?> />
 					</div>
 				</form>
 			</div>

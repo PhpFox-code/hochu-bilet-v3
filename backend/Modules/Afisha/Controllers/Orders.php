@@ -235,6 +235,9 @@
 
         function printAction()
         {
+            if (\Core\User::access()['order_print'] != 'edit') {
+                $this->no_access();
+            }
             $seats = (array) $_POST['SEATS'];
             $printType = $_POST['print-type'] ? $_POST['print-type'] : 'base';
             if (count($seats) == 0) {
