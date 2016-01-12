@@ -208,4 +208,17 @@
             return $diff === 0; 
         }
 
+        public static function getArray($key, $default = NULL) {
+            $cookie = static::get($key, $default);
+            if( is_array($cookie) ) {
+                return $cookie;
+            }
+            if( !$cookie ) {
+                return NULL;
+            }
+            $cookie = base64_decode($cookie);
+            $cookie = json_decode($cookie, true);
+            return $cookie;
+        }
+
     }

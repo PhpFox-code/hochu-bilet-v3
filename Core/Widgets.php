@@ -4,7 +4,7 @@
     use Plugins\Profiler\Profiler;
     use Core\QB\DB;
     use Modules\Cart\Models\Cart;
-    use Modules\User\Models\User;
+    use Users;
     use Modules\Catalog\Models\Filter;
     use Modules\Catalog\Models\Catalog;
 

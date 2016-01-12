@@ -9,7 +9,7 @@
     use Core\Route;
     use Core\HTML;
     use Core\QB\DB;
-    use Modules\User\Models\User;
+    use Core\User;
 
     class Base {
 

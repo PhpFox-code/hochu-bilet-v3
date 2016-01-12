@@ -269,4 +269,19 @@
             return htmlentities(strip_tags($string), ENT_QUOTES, 'UTF-8');
         }
 
+		/**
+		 * Returns the length of the given string. This is a UTF8-aware version
+		 * of [strlen](http://php.net/strlen).
+		 *
+		 *     $length = UTF8::strlen($str);
+		 *
+		 * @param   string  $str    string being measured for length
+		 * @return  integer
+		 * @uses    UTF8::$server_utf8
+		 * @uses    Kohana::$charset
+		 */
+		public static function strlen($str)
+		{
+			return mb_strlen($str, 'UTF-8');
+		}
     }
