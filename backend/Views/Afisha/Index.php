@@ -46,7 +46,7 @@
                 <div class="widgetContent">
                     <div class="widget">
                         <div class="widgetContent">
-                            <div class="dd pageList" id="myNest">
+                            <div class="dd pageList" <?php echo Core\User::caccess() == 'edit' ? 'id="myNest"' : null ?>>
                                 <ol class="dd-list">
                                     <?php echo Core\View::tpl(array('result' => $result, 'tpl_folder' => $tpl_folder, 'cur' => 0), $tpl_folder.'/Menu'); ?>
                                 </ol>

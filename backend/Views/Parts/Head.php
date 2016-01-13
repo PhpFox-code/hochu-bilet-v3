@@ -24,7 +24,7 @@
 <link rel="stylesheet" href="<?php echo Core\HTML::bmedia('css/Afisha.css'); ?>">
 <link rel="stylesheet" href="<?php echo Core\HTML::bmedia('css/my.css'); ?>">
 
-<link rel="stylesheet" href="<?php echo Core\HTML::bmedia('css/sresponsiveness.css'); ?>">
+<!--<link rel="stylesheet" href="--><?php //echo Core\HTML::bmedia('css/sresponsiveness.css'); ?><!--">-->
 
 
 <meta name="HandheldFriendly" content="True">

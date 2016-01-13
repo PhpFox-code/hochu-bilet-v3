@@ -220,6 +220,9 @@
 				<div class="widgetTitle"><i class="fa-print"></i>Печать билетов</div>
 			</div>
 			<div class="widgetContent">
+				<?php echo (Core\User::info()->role_id != 2 && Core\User::access()['afisha_print_unlimit'] == 'edit')
+					? '<i>Включено ограничение на печать билетов: 1 раз</i>'
+					: null ?>
 				<form action="<?php echo Core\HTML::link('backend/orders/print/'.$obj->id) ?>" method="post" autocomplete="off">
 					<div class="form-group">
 						<?php $seats = array_filter(explode(',', $obj->seats_keys)); ?>

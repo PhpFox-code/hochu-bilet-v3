@@ -78,6 +78,11 @@ return array(
         'controller' => 'subscribers',
     ),
     array(
+        'name' => 'Статистика по заказам кассиров',
+        'module' => 'statistics',
+        'controller' => 'cassier',
+    ),
+    array(
         'name' => 'Рассылка писем',
         'module' => 'subscribe',
         'controller' => 'subscribe',
