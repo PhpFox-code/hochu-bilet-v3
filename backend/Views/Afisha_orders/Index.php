@@ -37,7 +37,9 @@
                                 <label class="control-label" style="display: block;">Статус</label>
                                 <select name="status">
                                     <option value="">Все</option>
-                                    <option value="success" <?php echo $_GET['status'] == 'success' ? 'selected' : '' ?>>Оплачено</option>
+                                    <?php foreach ($pay_statuses as $k => $status): ?>
+                                        <option value="<?php echo $k; ?>" <?php echo $_GET['status'] == $k ? 'selected' : '' ?>><?php echo $status; ?></option>
+                                    <?php endforeach; ?>n
                                 </select>
                             </div>
                             <input class="button btn-primary" style="display: inline-block;" type="submit" name="send" value="Поиск">
@@ -51,49 +53,6 @@
                     <?php echo $pageName; ?>
                     <span class="label label-primary"><?php echo $count; ?></span>
                 </div>
-<!--                <div class="toolbar no-padding" id="ordersToolbar" style="float: none;" data-uri="--><?php //echo Core\Arr::get($_SERVER, 'REQUEST_URI'); ?><!--">-->
-<!--                    <div class="btn-group">-->
-<!--                        <li class="btn btn-xs">-->
-<!--                            <a href="/backend/orders/index">-->
-<!--                                <i class="fa-refresh"></i>-->
-<!--                                <span class="hidden-xx">Сбросить</span>-->
-<!--                            </a>-->
-<!--                        </li>-->
-<!--                        <span class="btn btn-xs dropdownToggle dropdownSelect">-->
-<!--                             <i class="fa-filter"></i>-->
-<!--                             <span class="current-item">--><?php //echo isset($_GET['status']) ? $pay_statuses[ Core\Arr::get($_GET, 'status', 0) ] : 'Все'; ?><!--</span>-->
-<!--                             <span class="caret"></span>-->
-<!--                        </span>-->
-<!--                        <ul class="dropdownMenu pull-right">-->
-<!--                            <li>-->
-<!--                                <a href="--><?php //echo Core\Support::generateLink('status', NULL); ?><!--">-->
-<!--                                    <i class="fa-filter"></i>Все-->
-<!--                                </a>-->
-<!--                            </li>-->
-<!--                            <li>-->
-<!--                                <a href="--><?php //echo Core\Support::generateLink('status', 'null'); ?><!--">-->
-<!--                                    <i class="fa-filter"></i>Не оплачен-->
-<!--                                </a>-->
-<!--                            </li>-->
-<!--                            --><?php //foreach ( $pay_statuses as $id => $name ): ?>
-<!--                                <li>-->
-<!--                                    <a href="--><?php //echo Core\Support::generateLink('status', $id); ?><!--">-->
-<!--                                        <i class="fa-filter"></i>--><?php //echo $name; ?>
-<!--                                    </a>-->
-<!--                                </li>    -->
-<!--                            --><?php //endforeach ?>
-<!--                        </ul>-->
-<!---->
-<!--                        <li title="Выберите дату или период" class="range rangeOrderList btn btn-xs bs-tooltip">-->
-<!--                            <a href="#">-->
-<!--                                <i class="fa-calendar"></i>-->
-<!--                                <span>--><?php //echo Core\Support::getWidgetDatesRange(); ?><!--</span>-->
-<!--                                <i class="caret"></i>-->
-<!--                            </a>-->
-<!--                        </li>-->
-<!---->
-<!--                    </div>-->
-<!--                </div>-->
             </div>
 
             <div class="widgetContent">
@@ -106,7 +65,6 @@
                                 <th>Телефон</th>
                                 <th>E-mail</th>
                                 <th>Коммент</th>
-                                <!-- <th>IP</th> -->
                                 <th>Количество мест</th>
                                 <th>Сумма заказа</th>
                                 <th>Дата</th>
@@ -136,19 +94,33 @@
                                     <td class="sum-column"><?php echo backend\Modules\Afisha\Models\Afisha::getTotalCost($obj); ?> грн</td>
                                     <td><?php echo date( 'd.m.Y H:i', $obj->created_at ); ?></td>
                                     <td>
-                                        <?php if( $obj->status == 'failture' ): ?>
-                                            <?php $class = 'danger'; ?>
-                                        <?php elseif( $obj->status == 'wait_secure' OR $obj->status == 'wait_accept' ): ?>
+                                        <?php
+                                            $status = null;
+                                            if ($obj->status == 'success')
+                                                $status = 'success';
+                                            else if ($obj->created_at > time() - Core\Config::get('reserved_days') * 24 * 60 * 60
+                                                AND $obj->status != 'success')
+                                                $status = 'brone';
+                                            else if ($obj->created_at < time() - Core\Config::get('reserved_days') * 24 * 60 * 60
+                                                AND $obj->status != 'success')
+                                                $status = 'expired';
+                                        ?>
+                                        <?php if( $status == 'brone' ): ?>
                                             <?php $class = 'info'; ?>
-                                        <?php elseif( $obj->status == 'success' ): ?>
+                                        <?php elseif( $status == 'expired' ): ?>
+                                            <?php $class = 'warning'; ?>
+                                        <?php elseif( $status == 'success' ): ?>
                                             <?php $class = 'success'; ?>
-                                        <?php elseif( is_null($obj->status) OR $obj->status == ''): ?>
+                                        <?php elseif( is_null($status) OR $status == ''): ?>
                                             <?php $class = 'danger'; ?>
                                         <?php else: ?>
                                             <?php $class = 'default'; ?>
                                         <?php endif; ?>
-                                        <span title="<?php echo !is_null($obj->status) ? $pay_statuses[$obj->status] : 'Не оплачено'; ?>" class="label label-<?php echo $class; ?> orderLabelStatus bs-tooltip">
-                                            <span class="hidden-ss"><?php echo (!is_null($obj->status) AND $obj->status != '') ? $pay_statuses[$obj->status] : 'Не оплачено'; ?></span>
+
+                                        <span class="label label-<?php echo $class; ?> orderLabelStatus">
+                                            <span class="hidden-ss">
+                                                <?php echo (!is_null($status) AND $status != '') ? $pay_statuses[$status] : 'Не оплачено'; ?>
+                                            </span>
                                         </span>
                                     </td>
                                     <td>

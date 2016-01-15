@@ -39,71 +39,77 @@
         function indexAction () {
             $date_s = NULL; $date_po = NULL; $status = NULL; $eventId = null; $creatorId = null;
 
-            if ( Arr::get($_GET, 'date_s') ) { $date_s = strtotime( Arr::get($_GET, 'date_s') ); }
-            if ( Arr::get($_GET, 'date_po') ) { $date_po = strtotime( Arr::get($_GET, 'date_po') ); }
-            if ( isset( $this->pay_statuses[ Arr::get($_GET, 'status') ] ) ) { $status = Arr::get($_GET, 'status', 1); }
-            if ( Arr::get($_GET, 'status') == 'null' ) {
-                $status = 'null';
-            }
-            if (Arr::get($_GET, 'event') != 0) {
+            if ( Arr::get($_GET, 'date_s') )
+                $date_s = strtotime( Arr::get($_GET, 'date_s') );
+            if ( Arr::get($_GET, 'date_po') )
+                $date_po = strtotime( Arr::get($_GET, 'date_po') );
+            if ( isset( $this->pay_statuses[ Arr::get($_GET, 'status') ] ) )
+                $status = Arr::get($_GET, 'status');
+            if (Arr::get($_GET, 'event') != 0)
                 $eventId = Arr::get($_GET, 'event');
-            }
-            if (Arr::get($_GET, 'creator_id') != 0) {
+            if (Arr::get($_GET, 'creator_id') != 0)
                 $creatorId = Arr::get($_GET, 'creator_id');
-            }
 
-            $page = (int) Route::param('page') ? (int) Route::param('page') : 1;
-            $count = DB::select(array(DB::expr('COUNT(id)'), 'count'))->from($this->tablename);
+//            Count
+            $count = DB::select(array(DB::expr('COUNT(*)'), 'count'))->from($this->tablename);
             if( $date_s !== NULL ) { $count->where( $this->tablename.'.created_at', '>=', $date_s ); }
             if( $date_po !== NULL ) { $count->where( $this->tablename.'.created_at', '<=', $date_po + 24 * 60 * 60 - 1 ); }
-            if (User::info()->role_id != 2) { $count->where($this->tablename.'.creator_id', '=', User::info()->id);}
-            if( $status !== NULL ) { 
-                if ($status == 'null') {
-                    $count->where($this->tablename.'.status', 'IS', DB::expr('null'));
+            if( $status !== NULL ) {
+                switch ($status) {
+                    case 'brone':
+                        $count->where($this->tablename.'.created_at', '>', time() - Config::get('reserved_days') * 24 * 60 * 60)
+                            ->where($this->tablename.'.status', '!=', 'success');
+                        break;
+                    case 'expired':
+                        $count->where($this->tablename.'.created_at', '<', time() - Config::get('reserved_days') * 24 * 60 * 60)
+                            ->where($this->tablename.'.status', '!=', 'success');
+                        break;
+                    case 'success':
+                        $count->where( $this->tablename.'.status', '=', $status );
+                        break;
                 }
-                else {
-                    $count->where( $this->tablename.'.status', '=', $status );
-                }
             }
-            if ($eventId) {
-                $count->where( $this->tablename.'.afisha_id', '=', $eventId );
-            }
-            if ($creatorId) {
-                $count->where( $this->tablename.'.creator_id', '=', $creatorId );
-            }
-            $count   = $count->count_all();
+            if ($eventId) { $count->where( $this->tablename.'.afisha_id', '=', $eventId ); }
+            if ($creatorId) { $count->where( $this->tablename.'.creator_id', '=', $creatorId ); }
+            $count = $count->count_all();
 
+//            Pager
+            $page = (int) Route::param('page') ? (int) Route::param('page') : 1;
+            $pager = Pager::factory( $page, $count, $this->limit )->create();
+
+//            Result
             $result = DB::select($this->tablename.'.*', array('users.name', 'creator_name'))->from($this->tablename)
                 ->join('users', 'LEFT OUTER')
                     ->on('users.id', '=', $this->tablename.'.creator_id');
-
             if( $date_s ) { $result->where( $this->tablename.'.created_at', '>=', $date_s ); }
             if( $date_po ) { $result->where( $this->tablename.'.created_at', '<=', $date_po + 24 * 60 * 60 - 1 ); }
             if (User::info()->role_id != 2) { $result->where($this->tablename.'.creator_id', '=', User::info()->id);}
-            if( $status !== NULL ) { 
-                if ($status == 'null') {
-                    $result->where($this->tablename.'.status', 'IS', DB::expr('null'));
-                }
-                else {
-                    $result->where( $this->tablename.'.status', '=', $status );
+            if( $status !== NULL ) {
+                switch ($status) {
+                    case 'brone':
+                        $result->where($this->tablename.'.created_at', '>', time() - Config::get('reserved_days') * 24 * 60 * 60)
+                            ->where($this->tablename.'.status', '!=', 'success');
+                        break;
+                    case 'expired':
+                        $result->where($this->tablename.'.created_at', '<', time() - Config::get('reserved_days') * 24 * 60 * 60)
+                            ->where($this->tablename.'.status', '!=', 'success');
+                        break;
+                    case 'success':
+                        $result->where( $this->tablename.'.status', '=', $status );
+                        break;
                 }
             }
-            if ($eventId) {
+            if ($eventId)
                 $result->where( $this->tablename.'.afisha_id', '=', $eventId );
-            }
-            if ($creatorId) {
+            if ($creatorId)
                 $result->where( $this->tablename.'.creator_id', '=', $creatorId );
-            }
-
             $result = $result->order_by($this->tablename.'.created_at', 'DESC')
                 ->limit($this->limit)->offset(($page - 1) * $this->limit)->find_all();
-            $pager = Pager::factory( $page, $count, $this->limit )->create();
 
-            $creators = array();
-            if (User::info()->role_id == 2) {
-                $creators = DB::select()->from('users')->where('status', '=', 1)->find_all();
-            }
+//            Creators
+            $creators = DB::select()->from('users')->where('status', '=', 1)->find_all();
 
+//            Render
             $this->_content = View::tpl(
                 array(
                     'result' => $result,
@@ -113,7 +119,6 @@
                     'date_po' => $date_po,
                     'pay_statuses' => $this->pay_statuses,
                     'count' => $count,
-//                    'count' => DB::select(array(DB::expr('COUNT(id)'), 'count'))->from($this->tablename)->count_all(),
                     'events' => DB::select()->from('afisha')->where('place_id', 'IS NOT', null)->find_all(),
                     'creators' => $creators,
                 ),$this->tpl_folder.'/Index');

@@ -47,9 +47,7 @@
 									<div class="input-group">
 										<select class="form-control" name="order_status" id="order_status">
 											<option value="" <?php echo is_null($obj->status) ? 'selected' : ''; ?>>Не оплачено</option>
-											<?php foreach( $pay_statuses as $id => $name ): ?>
-												<option value="<?php echo $id; ?>" <?php echo $obj->status == $id ? 'selected' : ''; ?>><?php echo $name; ?></option>
-											<?php endforeach; ?>
+											<option value="success" <?php echo $obj->status == 'success' ? 'selected' : ''; ?>>Оплачено</option>
 										</select>
 										<span class="input-group-btn">
 											<div class="col-md-12">
