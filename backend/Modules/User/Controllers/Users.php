@@ -12,7 +12,7 @@
     use Core\View;
     use Core\Pager\Pager;
 
-    use Backend\Modules\User\Models\Users AS Model;
+    use backend\Modules\User\Models\Users AS Model;
 
     class Users extends \Backend\Modules\Base {
 
