@@ -62,7 +62,10 @@
                         break;
                     case 'expired':
                         $count->where($this->tablename.'.created_at', '<', time() - Config::get('reserved_days') * 24 * 60 * 60)
-                            ->where($this->tablename.'.status', '!=', 'success');
+                            ->and_where_open()
+                                ->where($this->tablename.'.status', '!=', 'success')
+                                ->or_where($this->tablename.'.status', 'is', null)
+                            ->and_where_close();
                         break;
                     case 'success':
                         $count->where( $this->tablename.'.status', '=', $status );
@@ -92,7 +95,10 @@
                         break;
                     case 'expired':
                         $result->where($this->tablename.'.created_at', '<', time() - Config::get('reserved_days') * 24 * 60 * 60)
-                            ->where($this->tablename.'.status', '!=', 'success');
+                            ->and_where_open()
+                                ->where($this->tablename.'.status', '!=', 'success')
+                                ->or_where($this->tablename.'.status', 'is', null)
+                            ->and_where_close();
                         break;
                     case 'success':
                         $result->where( $this->tablename.'.status', '=', $status );
