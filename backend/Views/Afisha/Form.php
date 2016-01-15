@@ -175,6 +175,7 @@
                 <?php if (Core\User::caccess() == 'edit'): ?>
                     <div>
                         <button class="btn btn-primary" id="addPrice" <?php echo Core\User::caccess() != 'edit' ? 'disabled' : null; ?>>Добавить цену</button>
+                        <button class="btn btn-info" id="tooglePrices">Скрыть/Показать цены</button>
                     </div>
                 <?php endif; ?>
                 <!-- <div class="col-md-8">
@@ -299,5 +300,10 @@
             $(selector).val(date);
         }
         pickerInit('.myPicker');
+
+        $('#tooglePrices').click(function(e){
+            e.preventDefault();
+            $('.prices-list').toggle();
+        });
     });
 </script>
