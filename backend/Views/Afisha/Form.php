@@ -135,21 +135,21 @@
                 </div>
                 <br>
                 <?php if (Core\User::caccess() == 'edit' OR Core\User::access()['afisha_print'] == 'edit'): ?>
-                    <div style="border: 2px solid #f7f7f8; padding 10px 0;">
-                        <h2>Печать</h2>
-                        <div class="rowSection">
-                            <div class="col-md-4" style="text-align: right">
-                                <button class="btn btn-primary" style="margin-left: 30px;" id="printPlace">Распечатать билет</button>
-                                <label class="checkerWrap-inline">
-                                    <input name="print-type" value="base" type="radio" checked>Обычная</label>
-                                <label class="checkerWrap-inline">
-                                    <input name="print-type" value="termo" type="radio">Термопринтер</label>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="text" class="selected-seats" id="tag2" />
-                            </div>
-                        </div>
-                    </div>
+<!--                    <div style="border: 2px solid #f7f7f8; padding 10px 0;">-->
+<!--                        <h2>Печать</h2>-->
+<!--                        <div class="rowSection">-->
+<!--                            <div class="col-md-4" style="text-align: right">-->
+<!--                                <button class="btn btn-primary" style="margin-left: 30px;" id="printPlace">Распечатать билет</button>-->
+<!--                                <label class="checkerWrap-inline">-->
+<!--                                    <input name="print-type" value="base" type="radio" checked>Обычная</label>-->
+<!--                                <label class="checkerWrap-inline">-->
+<!--                                    <input name="print-type" value="termo" type="radio">Термопринтер</label>-->
+<!--                            </div>-->
+<!--                            <div class="col-md-8">-->
+<!--                                <input type="text" class="selected-seats" id="tag2" />-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
                 <?php endif; ?>
                 <?php if (Core\User::caccess() == 'edit' OR Core\User::access()['afisha_brone'] == 'edit'): ?>
                     <div style="border: 2px solid #f7f7f8; padding 10px 0;">
