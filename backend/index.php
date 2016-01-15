@@ -1,6 +1,6 @@
 <?php
     ini_set('display_errors', 'on'); // Display all errors on screen
-    error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
+    error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_WARNING);
     header("Cache-Control: public");
     header("Expires: " . date("r", time() + 3600));
     header('Content-Type: text/html; charset=UTF-8');

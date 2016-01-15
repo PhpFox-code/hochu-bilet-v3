@@ -86,7 +86,7 @@
                     ->on('users.id', '=', $this->tablename.'.creator_id');
             if( $date_s ) { $result->where( $this->tablename.'.created_at', '>=', $date_s ); }
             if( $date_po ) { $result->where( $this->tablename.'.created_at', '<=', $date_po + 24 * 60 * 60 - 1 ); }
-            if (User::info()->role_id != 2) { $result->where($this->tablename.'.creator_id', '=', User::info()->id);}
+//            if (User::info()->role_id != 2) { $result->where($this->tablename.'.creator_id', '=', User::info()->id);}
             if( $status !== NULL ) {
                 switch ($status) {
                     case 'brone':
@@ -272,7 +272,7 @@
 
         function printAction()
         {
-            if (\Core\User::access()['order_print'] != 'edit') {
+            if (User::get_access_for_controller('afisha_brone') != 'edit') {
                 $this->no_access();
             }
             $seats = (array) $_POST['SEATS'];

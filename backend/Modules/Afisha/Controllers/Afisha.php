@@ -338,7 +338,7 @@
 
         function printTicketAction()
         {
-            if (User::access()['afisha_print'] != 'edit') {
+            if (User::get_access_for_controller('afisha_brone') != 'edit') {
                 $this->no_access();
             }
             $key = Route::param('key');

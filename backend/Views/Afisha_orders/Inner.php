@@ -221,7 +221,8 @@
 				<?php echo (Core\User::info()->role_id != 2 && Core\User::access()['afisha_print_unlimit'] == 'edit')
 					? '<i>Включено ограничение на печать билетов: 1 раз</i>'
 					: null ?>
-				<form action="<?php echo Core\HTML::link('backend/orders/print/'.$obj->id) ?>" method="post" autocomplete="off">
+				<form action="<?php echo Core\HTML::link('backend/orders/print/'.$obj->id) ?>" method="post" autocomplete="off" target="_blank"
+					  data-print-limit="<?php echo (Core\User::info()->role_id != 2 && Core\User::access()['afisha_print_unlimit'] == 'edit') ? 'true' : 'false' ?>">
 					<div class="form-group">
 						<?php $seats = array_filter(explode(',', $obj->seats_keys)); ?>
 						<?php if (count($seats)): ?>
@@ -243,9 +244,9 @@
 							<input name="print-type" value="base" type="radio" checked>Обычная</label>
 						<label class="checkerWrap-inline">
 							<input name="print-type" value="termo" type="radio">Термопринтер</label>
-						<input class="btn btn-primary" type="submit" value="Печать"
+						<input class="btn btn-primary print_order_tickets" type="submit" value="Печать"
 							<?php echo (Core\User::caccess() == 'edit'
-								OR  Core\User::access()['order_print'] == 'edit') ? null : 'disabled' ?> />
+								OR (Core\User::access()['order_print'] == 'edit' && Core\User::info()->id == $obj->creator_id) ) ? null : 'disabled' ?> />
 					</div>
 				</form>
 			</div>
@@ -253,3 +254,15 @@
 	</div>
 </div>
 <span id="afishaOrderParameters" data-id="<?php echo $obj->id; ?>"></span>
+<script>
+	$(function(){
+		$('.print_order_tickets').closest('form[data-print-limit="true"]').submit(function(e){
+			setTimeout(function(){
+				$('.print_order_tickets').closest('form').find('input[name^="SEATS"]:checked').each(function(){
+					console.log($(this));
+					$(this).prop('disabled', true).prop('checked', false).parent('label').removeClass('checked').addClass('disabled');
+				});
+			}, 100);
+		});
+	});
+</script>
