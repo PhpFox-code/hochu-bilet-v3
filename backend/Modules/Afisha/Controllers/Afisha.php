@@ -421,7 +421,7 @@
 
         function createOrderAction()
         {
-            if (User::access()['afisha_brone'] != 'edit') {
+            if (User::get_access_for_controller('afisha_brone') != 'edit') {
                 $this->no_access();
             }
             $key = Route::param('key');
