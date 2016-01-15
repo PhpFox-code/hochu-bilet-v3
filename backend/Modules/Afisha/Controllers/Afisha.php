@@ -32,41 +32,68 @@
         }
 
         function indexAction () {
-            $date_s = NULL; $date_po = NULL; $status = NULL;
+            $date_s = NULL; $date_po = NULL; $status = NULL; $name = null; $place = null; $city = null;
             if ( Arr::get($_GET, 'date_s') ) { $date_s = strtotime( Arr::get($_GET, 'date_s') ); }
             if ( Arr::get($_GET, 'date_po') ) { $date_po = strtotime( Arr::get($_GET, 'date_po') ); }
-            if ( isset($_GET['status']) ) { $status = Arr::get($_GET, 'status', 1); }
-
-            $page = (int) Route::param('page') ? (int) Route::param('page') : 1;
+            if ( isset($_GET['status']) && $_GET['status'] != '' ) {
+                $status = Arr::get($_GET, 'status') == 'published' ? 1 : 0;
+            }
+            if ( Arr::get($_GET, 'name') ) { $name = urldecode(Arr::get($_GET, 'name')); }
+            if ( Arr::get($_GET, 'city') ) { $city = (int) Arr::get($_GET, 'city'); }
+            if ( Arr::get($_GET, 'place') ) {
+                $place = Arr::get($_GET, 'place') == 'null' ? null : (int) Arr::get($_GET, 'place');
+            }
+//            Count
             $count = DB::select(array(DB::expr('COUNT(id)'), 'count'))->from($this->tablename);
-            if( $date_s ) { $count->where( 'created_at', '>=', $date_s ); }
-            if( $date_po ) { $count->where( 'created_at', '<=', $date_po + 24 * 60 * 60 - 1 ); }
-            if( $status !== NULL ) { $count->where( 'status', '=', $status ); }
+            if( $date_s ) { $count->where( $this->tablename.'.event_date', '>=', $date_s ); }
+            if( $date_po ) { $count->where( $this->tablename.'.event_date', '<=', $date_po + 24 * 60 * 60 - 1 ); }
+            if( $status !== NULL ) { $count->where( $this->tablename.'.status', '=', $status ); }
+            if( $name !== NULL ) { $count->where( $this->tablename.'.name', 'LIKE', "%$name%" ); }
+            if( $_GET['place'] != '' ) { $count->where( $this->tablename.'.place_id', '=', $place ); }
+            if( $city !== NULL ) {
+                $count->where_open()
+                    ->where( $this->tablename.'.city_id', '=', $city )
+                    ->or_where($this->tablename.'.place_id', 'IN', DB::expr('(SELECT id FROM places WHERE city_id = '.$city.')'))
+                ->where_close();
+            }
             $count = $count->count_all();
-            // list posts first page
+
+//            Pager
+            $page = (int) Route::param('page') ? (int) Route::param('page') : 1;
+            $pager = Pager::factory( $page, $count, $this->limit )->create();
+
+//            Result
             $result = DB::select(
-                            'afisha.*',
+                            $this->tablename.'.*',
                             array('places.name', 'p_name'),
                             array(DB::expr('MIN(prices.price)'), 'p_from'),
                             array(DB::expr('MAX(prices.price)'), 'p_to')
                         )
-                        ->from('afisha')
+                        ->from($this->tablename)
                         ->join('places', 'left outer')
-                            ->on('afisha.place_id', '=', 'places.id')
+                            ->on($this->tablename.'.place_id', '=', 'places.id')
                             ->on('places.status', '=', DB::expr(1))
                         ->join('prices', 'left outer')
-                            ->on('afisha.id', '=', 'prices.afisha_id')
+                            ->on($this->tablename.'.id', '=', 'prices.afisha_id')
                         ->group_by('afisha.id');
 
-            if( $status !== NULL ) { $result->where( 'status', '=', $status ); }
-            if( $date_s ) { $result->where( 'created_at', '>=', $date_s ); }
-            if( $date_po ) { $result->where( 'created_at', '<=', $date_po + 24 * 60 * 60 - 1 ); }
-            $result = $result->order_by('sort', 'asc')->find_all();
+            if( $status !== NULL ) { $result->where( $this->tablename.'.status', '=', $status ); }
+            if( $date_s ) { $result->where( $this->tablename.'.event_date', '>=', $date_s ); }
+            if( $date_po ) { $result->where( $this->tablename.'.event_date', '<=', $date_po + 24 * 60 * 60 - 1 ); }
+            if( $name !== NULL ) { $result->where( $this->tablename.'.name', 'LIKE', "%$name%" ); }
+            if( $_GET['place'] != '' ) { $result->where( $this->tablename.'.place_id', '=', $place ); }
+            if( $city !== NULL ) {
+                $result->where_open()
+                    ->where( $this->tablename.'.city_id', '=', $city )
+                    ->or_where($this->tablename.'.place_id', 'IN', DB::expr('(SELECT id FROM places WHERE city_id = '.$city.')'))
+                    ->where_close();
+            }
+            $result = $result->order_by($this->tablename.'.sort', 'asc')->limit($this->limit)
+                ->offset(($page - 1) * $this->limit)->find_all();
             $arr = array();
             foreach ($result as $obj) {
                 $arr[$obj->parent_id][] = $obj;
             }
-            $pager = Pager::factory( $page, $count, $this->limit )->create();
 
             $this->_toolbar = Widgets::get( 'Toolbar/List', array( 'add' => 1, 'delete' => 1 ) );
 
@@ -78,6 +105,8 @@
                     'count' => DB::select(array(DB::expr('COUNT(id)'), 'count'))->from($this->tablename)->count_all(),
                     'pager' => $pager,
                     'pageName' => 'Афиши',
+                    'places' => DB::select()->from('places')->find_all(),
+                    'cities' => DB::select()->from('cities')->order_by('sort')->find_all(),
                 ), $this->tpl_folder.'/Index');
         }
 
