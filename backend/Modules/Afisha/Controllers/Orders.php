@@ -395,7 +395,32 @@
                 }
                 $newSeats = array_unique($newSeats);
                 $newSeats = implode(',', $newSeats);
-                DB::update($this->tablename)->set(array('printed_seats' => $newSeats))->execute();
+                DB::update($this->tablename)->set(array('printed_seats' => $newSeats))->where('id', '=', $order->id)->execute();
+            }
+
+//            Update order status
+            $newOrder = DB::select()->from('afisha_orders')->where('id', '=', $order->id)->find();
+            $printedAllSeats = true;
+            $printedSeats = array_filter(explode(',', $newOrder->printed_seats));
+            foreach(array_filter(explode(',', $newOrder->seats_keys)) as $seat) {
+                if (!in_array($seat, $printedSeats))
+                    $printedAllSeats = false;
+            }
+            if (User::info()->role_id != 2 && $printedAllSeats) {
+                \Core\Common::update('afisha_orders', array('status' => 'success'))->where('id', '=', (int)$order->id)
+                    ->execute();
+
+                $prices = DB::select('id')->from('prices')->where('afisha_id', '=', $order->afisha_id)->find_all();
+                $pricesArr = array();
+                if (count($prices)) {
+                    foreach ($prices as $key => $value) {
+                        $pricesArr[] = $value->id;
+                    }
+                    \Core\Common::update('seats', array('status' => 3))
+                        ->where('view_key', 'IN', array_filter(explode(',', $order->seats_keys)))
+                        ->where('price_id', 'IN', $pricesArr)
+                        ->execute();
+                }
             }
 
             if ($printType == 'base') {

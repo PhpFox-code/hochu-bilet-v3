@@ -32,7 +32,7 @@
 		<div class="widget">
 			<div class="widgetHeader">
 				<div class="widgetTitle"><i class="fa-credit-card"></i>Заказ <span class="label label-primary">№ <?php echo $obj->id; ?></span></div>
-				<?php if (Core\User::caccess() == 'edit'): ?>
+				<?php if (Core\User::info()->role_id == 2): ?>
 					<a onclick="return confirm('Это действие необратимо. Продолжить?');" href="/backend/orders/delete/<?php echo $obj->id; ?>" title="Удалить текущий заказ" >
 						<i class="fa-trash-o"></i> Удалить текущий заказ</a>
 				<?php endif; ?>
