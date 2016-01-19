@@ -168,34 +168,35 @@
             $this->_seo['title'] = 'Статистика по ' . $cassier->name;
             $this->setBreadcrumbs('Статистика по ' . $cassier->name);
 
-            $totalCntOrders = DB::select(array(DB::expr('COUNT(*)'), 'count'))->from('afisha_orders')
-                ->where('creator_id', '=', $cassier->id);
-            $this->setFilter($totalCntOrders, $date_s, $date_po, $status, $eventId, $creatorId, 'afisha_orders');
-            $totalCntOrders = $totalCntOrders->count_all();
+//            $totalCntOrders = DB::select(array(DB::expr('COUNT(*)'), 'count'))->from('afisha_orders')
+//                ->where('creator_id', '=', $cassier->id);
+//            $this->setFilter($totalCntOrders, $date_s, $date_po, $status, $eventId, $creatorId, 'afisha_orders');
+//            $totalCntOrders = $totalCntOrders->count_all();
 
             $ordersQuery = DB::select()->from('afisha_orders')->where('creator_id', '=', $cassier->id);
             $this->setFilter($ordersQuery, $date_s, $date_po, $status, $eventId, $creatorId, 'afisha_orders');
 
-            $orders = $ordersQuery->order_by('created_at', 'DESC')->limit($this->limit)->offset(($this->page - 1) * $this->limit)->find_all();
-            $pager = Pager::factory( $this->page, $totalCntOrders, $this->limit )->create();
+            $orders = $ordersQuery->order_by('created_at', 'DESC')->find_all();
+//            $pager = Pager::factory( $this->page, $totalCntOrders, $this->limit )->create();
 
 //            Make array with all need data
-            $fullResult = array();
-
+            $afishaGroups = array();
             foreach ($orders as $order) {
-                $fullResult[$order->id]['order'] = $order;
-                $fullResult[$order->id]['afisha'] = DB::select()->from('afisha')->where('id', '=', $order->afisha_id)->find();
+                $afisha = DB::select()->from('afisha')->where('id', '=', $order->afisha_id)->find();
 
+                $afishaGroups[$order->afisha_id]['afisha'] = $afisha;
+                $afishaGroups[$order->afisha_id]['orders'][$order->id] = $order;
             }
 
 //            Rendering
             $this->_content = View::tpl(
                 array(
-                    'result' => $fullResult,
+                    'afishaGroups' => $afishaGroups,
                     'pay_statuses' => $this->pay_statuses,
                     'events' => DB::select()->from('afisha')->where('place_id', 'IS NOT', null)->find_all(),
                     'creators' => array(),
-                    'pager' => $pager,
+                    'pager' => '',
+                    'tpl_folder' => $this->tpl_folder,
                 ),$this->tpl_folder.'/Inner');
         }
 

@@ -1965,7 +1965,7 @@ textarea.form-control {
 }
 
 .widgetContent {
-	max-height:5000px;
+	/*max-height:5000px;*/
 	
 	
 	-webkit-transition: all 0.2s ease;

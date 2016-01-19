@@ -6,52 +6,18 @@
                 <?php echo Core\View::tpl(array('creators' => array(), 'events' => $events), 'Cassier/Filter'); ?>
 
                 <div class="checkbox-wrap">
-                    <table class="table table-striped table-bordered" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th class="hidden-ss">Номер заказа</th>
-                                <th>Название события</th>
-                                <th>Примечание админа</th>
-                                <th>Количество мест</th>
-                                <th>Сумма заказа</th>
-                                <th>Дата</th>
-                                <th>Статус</th>
-                            </tr>
-                        </thead>
-                     
-                        <tbody>
-                            <?php foreach ( $result as $el ): ?>
-                                <?php $obj = $el['order']; ?>
-                                <?php $afisha = $el['afisha']; ?>
-                                <tr data-id="<?php echo $obj->id; ?>">
-                                    <td class="hidden-ss">
-                                        <a href="/backend/orders/edit/<?php echo $obj->id; ?>" target="_blank"><?php echo $obj->id; ?></a>
-                                    </td>
-                                    <td><a href="/backend/afisha/edit/<?php echo $afisha->id; ?>"><?php echo $afisha->name; ?></a></td>
-                                    <td><?php echo $obj->admin_comment ?></td>
-                                    <td><?php echo count(array_filter(explode(',', $obj->seats_keys))); ?></td>
-                                    <td class="sum-column"><?php echo backend\Modules\Afisha\Models\Afisha::getTotalCost($obj); ?> грн</td>
-                                    <td><?php echo date( 'd.m.Y H:i', $obj->created_at ); ?></td>
-                                    <td>
-                                        <?php if( $obj->status == 'failture' ): ?>
-                                            <?php $class = 'danger'; ?>
-                                        <?php elseif( $obj->status == 'wait_secure' OR $obj->status == 'wait_accept' ): ?>
-                                            <?php $class = 'info'; ?>
-                                        <?php elseif( $obj->status == 'success' ): ?>
-                                            <?php $class = 'success'; ?>
-                                        <?php elseif( is_null($obj->status) OR $obj->status == ''): ?>
-                                            <?php $class = 'danger'; ?>
-                                        <?php else: ?>
-                                            <?php $class = 'default'; ?>
-                                        <?php endif; ?>
-                                        <span title="<?php echo !is_null($obj->status) ? $pay_statuses[$obj->status] : 'Не оплачено'; ?>" class="label label-<?php echo $class; ?> orderLabelStatus bs-tooltip">
-                                            <span class="hidden-ss"><?php echo (!is_null($obj->status) AND $obj->status != '') ? $pay_statuses[$obj->status] : 'Не оплачено'; ?></span>
-                                        </span>
-                                    </td>
-                                </tr>
-                            <?php endforeach ?>
-                        </tbody>
-                    </table>
+                    <?php foreach($afishaGroups as $key => $value): ?>
+                        <?php $afisha = $value['afisha']; ?>
+                        <div style="margin-bottom: 20px;">
+                            <div class="eventName">
+                                <a href="/backend/afisha/edit/<?php echo $afisha->id; ?>"><?php echo $afisha->name ?></a>
+                            </div>
+                            <div class="eventOrders">
+                                <?php echo Core\View::tpl(array('result' => $value['orders'], 'afisha' => $afisha,
+                                    'pay_statuses' => $pay_statuses), $tpl_folder.'/Orders') ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
             <?php echo $pager; ?>
