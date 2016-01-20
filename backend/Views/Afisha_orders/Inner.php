@@ -262,9 +262,13 @@
 		$('.print_order_tickets').closest('form[data-print-limit="true"]').submit(function(e){
 			setTimeout(function(){
 				$('.print_order_tickets').closest('form').find('input[name^="SEATS"]:checked').each(function(){
-					console.log($(this));
 					$(this).prop('disabled', true).prop('checked', false).parent('label').removeClass('checked').addClass('disabled');
 				});
+//				Disable change status button
+				if ($('input[name^="SEATS"]:not(:disabled)').length == 0) {
+					$('#update_order_status').prop('disabled', true);
+					$('#order_status option[value="success"]').attr('selected', 'selected');
+				}
 			}, 100);
 		});
 	});
