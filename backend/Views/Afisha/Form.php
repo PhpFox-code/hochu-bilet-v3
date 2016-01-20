@@ -172,15 +172,15 @@
                 <div>
                     <div style="display: inline-block; background: #01ff23; width: 20px; height: 20px;"></div> - Оплаченные
                 </div>
-                <?php if (Core\User::caccess() == 'edit'): ?>
                     <div>
-                        <button class="btn btn-primary" id="addPrice" <?php echo Core\User::caccess() != 'edit' ? 'disabled' : null; ?>>Добавить цену</button>
+                        <?php if (Core\User::caccess() == 'edit'): ?>
+                            <button class="btn btn-primary" id="addPrice" <?php echo Core\User::caccess() != 'edit' ? 'disabled' : null; ?>>Добавить цену</button>
+                        <?php endif; ?>
                         <button class="btn btn-info" id="tooglePrices">Скрыть/Показать цены</button>
                     </div>
-                <?php endif; ?>
                 <!-- <div class="col-md-8">
                 </div> -->
-                <div class="prices-list" style="padding-bottom: 10px;">
+                <div class="prices-list" style="padding-bottom: 10px; display: none;">
                 </div>
                 
                 <div id="map_place"></div>
