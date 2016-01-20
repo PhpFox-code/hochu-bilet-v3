@@ -36,6 +36,7 @@
             $this->pay_statuses = Config::get('order.pay_statuses');
             $this->seat_statuses = Config::get('order.seat_statuses');
             $this->page = (int) Route::param('page') ? (int) Route::param('page') : 1;
+
         }
 
         function indexAction () {
@@ -53,7 +54,8 @@
                 $eventId = Arr::get($_GET, 'event');
             if (Arr::get($_GET, 'creator_id') != 0)
                 $creatorId = Arr::get($_GET, 'creator_id');
-
+            if (User::info()->role_id != 2)
+                $creatorId = User::info()->id;
 
 //            Select all admins
             $cassiers = DB::select(

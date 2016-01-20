@@ -4,36 +4,38 @@
             <div class="widgetContent">
                 <?php echo Core\View::tpl(array('creators' => $creators, 'events' => $events), 'Cassier/Filter'); ?>
 
-                <div class="rowSection">
-                    <!-- Total orders count-->
-                    <div class="col-md-6">
-                        <div class="widget box">
-                            <div class="widgetHeader">
-                                <div class="widgetTitle">
-                                    <i class="fa-reorder"></i>
-                                    Заказы всех менеджеров
+                <?php if (Core\User::info()->role_id == 2): ?>
+                    <div class="rowSection">
+                        <!-- Total orders count-->
+                        <div class="col-md-6">
+                            <div class="widget box">
+                                <div class="widgetHeader">
+                                    <div class="widgetTitle">
+                                        <i class="fa-reorder"></i>
+                                        Заказы всех менеджеров
+                                    </div>
+                                </div>
+                                <div class="widgetContent">
+                                    <div id="totalOrders" data-json='<?php echo $jsonOrders; ?>'></div>
                                 </div>
                             </div>
-                            <div class="widgetContent">
-                                <div id="totalOrders" data-json='<?php echo $jsonOrders; ?>'></div>
+                        </div>
+                        <!-- Total prices -->
+                        <div class="col-md-6">
+                            <div class="widget box">
+                                <div class="widgetHeader">
+                                    <div class="widgetTitle">
+                                        <i class="fa-reorder"></i>
+                                        Заработки менеджеров
+                                    </div>
+                                </div>
+                                <div class="widgetContent">
+                                    <div id="totalPrices" data-json='<?php echo $jsonPrices; ?>'></div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <!-- Total prices -->
-                    <div class="col-md-6">
-                        <div class="widget box">
-                            <div class="widgetHeader">
-                                <div class="widgetTitle">
-                                    <i class="fa-reorder"></i>
-                                    Заработки менеджеров
-                                </div>
-                            </div>
-                            <div class="widgetContent">
-                                <div id="totalPrices" data-json='<?php echo $jsonPrices; ?>'></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <?php endif; ?>
 
                 <div class="checkbox-wrap">
                     <table class="table table-striped table-bordered orderList" cellspacing="0" width="100%">
@@ -93,72 +95,76 @@
 
 <script>
     $(function(){
-        var tOrders = $('#totalOrders').data('json');
-        $('#totalOrders').highcharts({
-            chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false,
-                type: 'pie'
-            },
-            title: {
-                text: 'Распределение заказов по менеджерам'
-            },
-            tooltip: {
-                pointFormat: '{series.name}: <b>{point.v:f} шт.</b>',
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                        style: {
-                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+        if ($('#totalOrders').length) {
+            var tOrders = $('#totalOrders').data('json');
+            $('#totalOrders').highcharts({
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Распределение заказов по менеджерам'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.v:f} шт.</b>',
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            }
                         }
                     }
-                }
-            },
-            series: [{
-                name: "Заказы",
-                colorByPoint: true,
-                data: tOrders
-            }]
-        });
+                },
+                series: [{
+                    name: "Заказы",
+                    colorByPoint: true,
+                    data: tOrders
+                }]
+            });
+        }
 
-        var tPrices = $('#totalPrices').data('json');
-        $('#totalPrices').highcharts({
-            chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false,
-                type: 'pie'
-            },
-            title: {
-                text: 'Распределение заработков по менеджерам'
-            },
-            tooltip: {
-                pointFormat: '{series.name}: <b>{point.price} грн.</b>',
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                        style: {
-                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+        if ($('#totalPrices').length) {
+            var tPrices = $('#totalPrices').data('json');
+            $('#totalPrices').highcharts({
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Распределение заработков по менеджерам'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.price} грн.</b>',
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            }
                         }
                     }
-                }
-            },
-            series: [{
-                name: "Заработки",
-                colorByPoint: true,
-                data: tPrices
-            }]
-        });
+                },
+                series: [{
+                    name: "Заработки",
+                    colorByPoint: true,
+                    data: tPrices
+                }]
+            });
+        }
     });
 </script>
