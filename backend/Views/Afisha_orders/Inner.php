@@ -245,8 +245,11 @@
 						<label class="checkerWrap-inline">
 							<input name="print-type" value="termo" type="radio">Термопринтер</label>
 						<input class="btn btn-primary print_order_tickets" type="submit" value="Печать"
-							<?php echo (Core\User::caccess() == 'edit'
-								OR (Core\User::access()['order_print'] == 'edit' && Core\User::info()->id == $obj->creator_id) ) ? null : 'disabled' ?> />
+							<?php echo ((Core\User::caccess() == 'edit'
+								OR (Core\User::access()['order_print'] == 'edit' && Core\User::info()->id == $obj->creator_id))
+								AND ($obj->created_at > time() - Core\Config::get('reserved_days') * 24 * 60 * 60 AND $obj->status != 'success')
+							) ? null : 'disabled' ?>
+						/>
 					</div>
 				</form>
 			</div>
