@@ -51,7 +51,7 @@
 										</select>
 										<span class="input-group-btn">
 											<div class="col-md-12">
-											<button class="btn btn-primary" id="update_order_status" type="button" <?php echo (Core\User::caccess() != 'edit') ? 'disabled' : null ?>>Обновить</button>
+											<button class="btn btn-primary" id="update_order_status" type="button" <?php echo (Core\User::caccess() != 'edit' OR $obj->status == 'success') ? 'disabled' : null ?>>Обновить</button>
 											</div>
 										</span>
 									</div>

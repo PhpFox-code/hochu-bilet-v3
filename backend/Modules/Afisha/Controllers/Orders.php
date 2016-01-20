@@ -393,7 +393,7 @@
                 foreach ($seats as $seat) {
                     $newSeats[] = $seat;
                 }
-                $newSeats = array_unique($newSeats);
+                $newSeats = array_filter(array_unique($newSeats));
                 $newSeats = implode(',', $newSeats);
                 DB::update($this->tablename)->set(array('printed_seats' => $newSeats))->where('id', '=', $order->id)->execute();
             }
