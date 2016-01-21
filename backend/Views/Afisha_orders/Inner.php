@@ -45,13 +45,14 @@
 							<div class="table-footer clearFix">
 								<div class="col-md-12">
 									<div class="input-group">
-										<select class="form-control" name="order_status" id="order_status">
+										<select class="form-control" name="order_status" id="order_status"
+											<?php echo (/*Core\User::caccess() != 'edit' OR*/ $obj->status == 'success') ? 'disabled' : null ?>>
 											<option value="" <?php echo is_null($obj->status) ? 'selected' : ''; ?>>Не оплачено</option>
 											<option value="success" <?php echo $obj->status == 'success' ? 'selected' : ''; ?>>Оплачено</option>
 										</select>
 										<span class="input-group-btn">
 											<div class="col-md-12">
-											<button class="btn btn-primary" id="update_order_status" type="button" <?php echo (Core\User::caccess() != 'edit' OR $obj->status == 'success') ? 'disabled' : null ?>>Обновить</button>
+											<button class="btn btn-primary" id="update_order_status" type="button" <?php echo (/*Core\User::caccess() != 'edit' OR*/ $obj->status == 'success') ? 'disabled' : null ?>>Обновить</button>
 											</div>
 										</span>
 									</div>
@@ -246,7 +247,7 @@
 							<input name="print-type" value="termo" type="radio">Термопринтер</label>
 						<input class="btn btn-primary print_order_tickets" type="submit" value="Печать"
 							<?php echo ((Core\User::caccess() == 'edit'
-								OR (Core\User::access()['order_print'] == 'edit' && Core\User::info()->id == $obj->creator_id))
+								OR Core\User::access()['order_print'] == 'edit')
 								AND ($obj->created_at > time() - Core\Config::get('reserved_days') * 24 * 60 * 60 AND $obj->status != 'success')
 							) ? null : 'disabled' ?>
 						/>
@@ -268,6 +269,7 @@
 				if ($('input[name^="SEATS"]:not(:disabled)').length == 0) {
 					$('#update_order_status').prop('disabled', true);
 					$('#order_status option[value="success"]').attr('selected', 'selected');
+					$('#order_status').prop('disabled', true);
 				}
 			}, 100);
 		});
