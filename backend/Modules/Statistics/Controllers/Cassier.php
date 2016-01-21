@@ -36,17 +36,19 @@
             $this->pay_statuses = Config::get('order.pay_statuses');
             $this->seat_statuses = Config::get('order.seat_statuses');
             $this->page = (int) Route::param('page') ? (int) Route::param('page') : 1;
-
         }
 
         function indexAction () {
+            if (User::info()->role_id != 2) {
+                HTTP::redirect('/backend/cassier/inner/'.(User::info()->id));
+            }
 //            Set filter vars
             $date_s = NULL; $date_po = NULL; $status = NULL; $eventId = null; $creatorId = null;
             if ( Arr::get($_GET, 'date_s') )
                 $date_s = strtotime( Arr::get($_GET, 'date_s') );
             if ( Arr::get($_GET, 'date_po') )
                 $date_po = strtotime( Arr::get($_GET, 'date_po') );
-            if ( isset( $this->pay_statuses[ Arr::get($_GET, 'status') ] ) )
+            if ( isset( $this->pay_statuses[ Arr::get($_GET, 'status') ]) )
                 $status = Arr::get($_GET, 'status', 1);
             if ( Arr::get($_GET, 'status') == 'null' )
                 $status = 'null';
@@ -129,7 +131,7 @@
                 $jsonPrices[$key]['name'] = $cassier->name . ($cassier->email ? '<br/>('.$cassier->email.')' : '');
                 $jsonPrices[$key]['y'] = ($totalPrice / $totalOrdersPrice);
                 $jsonPrices[$key]['price'] = number_format($totalPrice, 0, ',', ' ');
-                $jsonPrices[$key]['cntSeats'] = count($justSeats);
+                $jsonPrices[$key]['cntSeats'] = $justSeats;
 
             }
 
@@ -145,6 +147,10 @@
         }
 
         function innerAction () {
+            if (User::info()->role_id != 2 && User::info()->id != Route::param('id')) {
+                $this->no_access();
+            }
+
 //            Set filter vars
             $date_s = NULL; $date_po = NULL; $status = NULL; $eventId = null; $creatorId = null;
             if ( Arr::get($_GET, 'date_s') )

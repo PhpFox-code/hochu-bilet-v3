@@ -18,7 +18,8 @@ return array
              *
              * Ports and sockets may be appended to the hostname.
              */
-            'hostname'   => 'localhost',
+            'hostname'   => '91.206.30.13',
+//            'hostname'   => 'localhost',
             // 'database'   => 'hochu-db',
             // 'username'   => 'hochu-db',
             // 'password'   => '3F9nvHbL',
