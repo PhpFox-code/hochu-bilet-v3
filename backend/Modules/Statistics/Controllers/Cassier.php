@@ -477,7 +477,7 @@
 //
 //        function printAction()
 //        {
-//            if (\Core\User::access()['order_print'] != 'edit') {
+//            if (\Core\User::get_access_for_controller('order_print') != 'edit') {
 //                $this->no_access();
 //            }
 //            $seats = (array) $_POST['SEATS'];
@@ -556,7 +556,7 @@
 //
 //            $tickets = array();
 //            foreach ($seats as $seat) {
-//                if (User::info()->role_id != 2 && User::access()['afisha_print_unlimit'] == 'edit'
+//                if (User::info()->role_id != 2 && User::get_access_for_controller('afisha_print_unlimit') == 'edit'
 //                    && strpos($order->printed_seats, $seat) !== false) continue;
 //                $priceRow = DB::select('price')
 //                    ->from('prices')
@@ -586,7 +586,7 @@
 //            }
 //
 ////            Update print seats keys
-//            if (User::info()->role_id != 2 && User::access()['afisha_print_unlimit'] == 'edit') {
+//            if (User::info()->role_id != 2 && User::get_access_for_controller('afisha_print_unlimit') == 'edit') {
 //                $oldSeats = $order->printed_seats;
 //                $newSeats = array();
 //                if (strlen($oldSeats)) {

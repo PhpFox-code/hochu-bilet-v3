@@ -134,7 +134,7 @@
                     <div class="col-md-8"><input type="text" name="FORM[add_field]" value="<?php echo $obj->add_field ?>" class="form-control" /></div>
                 </div>
                 <br>
-                <?php if (Core\User::caccess() == 'edit' OR Core\User::access()['afisha_print'] == 'edit'): ?>
+                <?php if (Core\User::caccess() == 'edit' OR Core\User::get_access_for_controller('afisha_print') == 'edit'): ?>
 <!--                    <div style="border: 2px solid #f7f7f8; padding 10px 0;">-->
 <!--                        <h2>Печать</h2>-->
 <!--                        <div class="rowSection">-->
@@ -151,14 +151,14 @@
 <!--                        </div>-->
 <!--                    </div>-->
                 <?php endif; ?>
-                <?php if (Core\User::caccess() == 'edit' OR Core\User::access()['afisha_brone'] == 'edit'): ?>
+                <?php if (Core\User::caccess() == 'edit' OR Core\User::get_access_for_controller('afisha_brone') == 'edit'): ?>
                     <div style="border: 2px solid #f7f7f8; padding 10px 0;">
                         <h2>Бронь</h2>
                         <div class="rowSection">
                             <div class="col-md-4" style="text-align: right">
                                 <button class="btn btn-primary" style="margin-left: 30px;" id="orderPlace"
                                     <?php echo (Core\User::caccess() == 'edit'
-                                        OR Core\User::access()['afisha_brone'] == 'edit') ? null : 'disabled'; ?>>Забронировать</button>
+                                        OR Core\User::get_access_for_controller('afisha_brone') == 'edit') ? null : 'disabled'; ?>>Забронировать</button>
                             </div>
                             <div class="col-md-8">
                                 <input type="text" class="selected-order-seats" id="tag2-2" />

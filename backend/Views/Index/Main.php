@@ -63,7 +63,7 @@
             </div>
         </div>
     </div> -->
-    <?php if (Core\User::access()['subscribers'] != 'no'): ?>
+    <?php if (Core\User::get_access_for_controller('subscribers') != 'no'): ?>
         <div class="col-sm-6 col-md-3">
             <div class="statbox widget box box-shadow">
                 <div class="widgetContent">
@@ -113,7 +113,7 @@
             </div>
         </div>
     </div> -->
-    <?php if (Core\User::access()['banners'] != 'no'): ?>
+    <?php if (Core\User::get_access_for_controller('banners') != 'no'): ?>
         <div class="col-sm-6 col-md-3">
             <div class="statbox widget box box-shadow">
                 <div class="widgetContent">

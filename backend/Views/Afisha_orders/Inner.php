@@ -76,21 +76,10 @@
 						<thead>
 							<tr>
 								<th>Название</th>
-								<th>
-									Перейти на событие
-								</th>
-								<th>
-									Место проведения
-								</th>
-								<th>
-									Дата проведения
-								</th>
-								<th>
-									Время проведения
-								</th>
-								<th>
-									Описание
-								</th>
+								<th>Перейти на событие</th>
+								<th>Место</th>
+								<th>Дата</th>
+								<th>Время</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -116,13 +105,7 @@
 										<input type="text" class="form-control" value="<?php echo $afisha->event_time ?>">
 									</div>
 								</td>
-								<td>
-									<div class="input-group input-width-small">
-										<textarea name="descritpion"><?php echo strip_tags($afisha->text) ?></textarea>
-									</div>
-								</td>
 							</tr>
-
 						</tbody>
 					</table>
 				</div>
@@ -144,7 +127,7 @@
 						<div class="form-actions textright">
 							<button class="btn btn-primary" type="button" id="update_admin_comment" <?php echo (Core\User::caccess() != 'edit') ? 'disabled' : null ?>>Обновить</button>
 						</div>
-					</form>				
+					</form>
 				</div>
 			<?php else: ?>
 				<div class="widgetContent" id="form_user_info">
@@ -219,17 +202,17 @@
 				<div class="widgetTitle"><i class="fa-print"></i>Печать билетов</div>
 			</div>
 			<div class="widgetContent">
-				<?php echo (Core\User::info()->role_id != 2 && Core\User::access()['afisha_print_unlimit'] == 'edit')
+				<?php echo (Core\User::info()->role_id != 2 && Core\User::get_access_for_controller('afisha_print_unlimit') == 'edit')
 					? '<i>Включено ограничение на печать билетов: 1 раз</i>'
 					: null ?>
 				<form action="<?php echo Core\HTML::link('backend/orders/print/'.$obj->id) ?>" method="post" autocomplete="off" target="_blank"
-					  data-print-limit="<?php echo (Core\User::info()->role_id != 2 && Core\User::access()['afisha_print_unlimit'] == 'edit') ? 'true' : 'false' ?>">
+					  data-print-limit="<?php echo (Core\User::info()->role_id != 2 && Core\User::get_access_for_controller('afisha_print_unlimit') == 'edit') ? 'true' : 'false' ?>">
 					<div class="form-group">
 						<?php $seats = array_filter(explode(',', $obj->seats_keys)); ?>
 						<?php if (count($seats)): ?>
 							<?php foreach ($seats as $seat): ?>
 								<label class="checkerWrap ckbxWrap">
-									<?php if (Core\User::info()->role_id != 2 && Core\User::access()['afisha_print_unlimit'] == 'edit'
+									<?php if (Core\User::info()->role_id != 2 && Core\User::get_access_for_controller('afisha_print_unlimit') == 'edit'
 										&& strpos($obj->printed_seats, $seat) !== false): ?>
 										<input name="SEATS[]" value="<?php echo $seat ?>" type="checkbox" disabled="disabled">
 									<?php else: ?>
@@ -247,7 +230,7 @@
 							<input name="print-type" value="termo" type="radio">Термопринтер</label>
 						<input class="btn btn-primary print_order_tickets" type="submit" value="Печать"
 							<?php echo ((Core\User::caccess() == 'edit'
-								OR Core\User::access()['order_print'] == 'edit')
+								OR Core\User::get_access_for_controller('order_print') == 'edit')
 								AND ($obj->created_at > time() - Core\Config::get('reserved_days') * 24 * 60 * 60 AND $obj->status != 'success')
 							) ? null : 'disabled' ?>
 						/>
