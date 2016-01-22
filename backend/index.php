@@ -9,7 +9,7 @@
 
     define('HOST', str_replace('backend', '', dirname(__FILE__))); // Root path
     define('APPLICATION', 'backend'); // Choose application - backend or frontend. If frontend - set ""
-    define('PROFILER', FALSE); // On/off profiler
+    define('PROFILER', false); // On/off profiler
     define('START_TIME', microtime(TRUE)); // For profiler. Don't touch!
     define('START_MEMORY', memory_get_usage()); // For profiler. Don't touch!
 
