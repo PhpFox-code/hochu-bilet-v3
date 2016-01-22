@@ -436,7 +436,7 @@ jQuery(document).ready(function($) {
                 },
             })
             .always(function(data) {
-                if (data.success === true) {
+                if (data.success == true) {
                     generate(data.message, 'success');
                     if (data.reload == true) {
                         setTimeout(function(){

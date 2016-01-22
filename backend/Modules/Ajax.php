@@ -980,8 +980,13 @@
             if (!$afisha_id) {
                 die(json_encode(array('success' => false, 'message' => 'Ошибка получения данных')));
             }
-
-            $res = \Core\Common::update('afisha_orders', array('status' => $status))->where('id', '=', (int)$afisha_id)->execute();
+            $orderData = array('status' => $status);
+            if ($status == 'success') {
+                $orderData['payer_id'] = User::info()->id;
+            } else {
+                $orderData['payer_id'] = 0;
+            }
+            \Core\Common::update('afisha_orders', $orderData)->where('id', '=', (int)$afisha_id)->execute();
 
             // Get current order
             $afisha = DB::select()->from('afisha_orders')->where('id', '=', (int)$afisha_id)->find();
@@ -998,12 +1003,7 @@
                     ->execute();
             }
 
-            // if ($res) {
-            die(json_encode(array('success' => true, 'message' => 'Данные сохранены', 'reload' => false)));
-            // }
-            // else {
-            //     die(json_encode(array('success' => false, 'message' => 'Ошибка обновления данных')));
-            // }
+            die(json_encode(array('success' => true, 'message' => 'Данные сохранены', 'reload' => true)));
         }
 
         public function updateUserInfoAction(){

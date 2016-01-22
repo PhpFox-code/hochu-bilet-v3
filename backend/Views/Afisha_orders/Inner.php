@@ -46,13 +46,14 @@
 								<div class="col-md-12">
 									<div class="input-group">
 										<select class="form-control" name="order_status" id="order_status"
-											<?php echo (/*Core\User::caccess() != 'edit' OR*/ $obj->status == 'success') ? 'disabled' : null ?>>
+											<?php echo ($obj->status == 'success' AND Core\User::info()->role_id != 2) ? 'disabled' : null ?>>
 											<option value="" <?php echo is_null($obj->status) ? 'selected' : ''; ?>>Не оплачено</option>
 											<option value="success" <?php echo $obj->status == 'success' ? 'selected' : ''; ?>>Оплачено</option>
 										</select>
 										<span class="input-group-btn">
 											<div class="col-md-12">
-											<button class="btn btn-primary" id="update_order_status" type="button" <?php echo (/*Core\User::caccess() != 'edit' OR*/ $obj->status == 'success') ? 'disabled' : null ?>>Обновить</button>
+											<button class="btn btn-primary" id="update_order_status" type="button"
+												<?php echo ($obj->status == 'success' AND Core\User::info()->role_id != 2) ? 'disabled' : null ?>>Обновить</button>
 											</div>
 										</span>
 									</div>
@@ -185,11 +186,12 @@
 				<div class="rowSection">
 					<div class="col-md-9">
 						<label for="tag2">Списко выбранных мест</label>
-						<input type="text" class="form-control" id="tag2" value="<?php echo $obj->seats_keys ?>" />
+						<input type="text" class="form-control" id="tag2" value="<?php echo $obj->seats_keys ?>"
+							<?php echo (Core\User::caccess() != 'edit' OR ($obj->status == 'success' && Core\User::info()->role_id != 2)) ? 'disabled' : null ?> />
 					</div>
 					<div class="col-md-3">
 						<button class="btn btn-primary" style="margin-top: 30px;" id="update_seats" type="button"
-							<?php echo (Core\User::caccess() != 'edit') ? 'disabled' : null ?>>Сохранить изменения</button>
+							<?php echo (Core\User::caccess() != 'edit' OR ($obj->status == 'success' && Core\User::info()->role_id != 2)) ? 'disabled' : null ?>>Сохранить изменения</button>
 					</div>
 				</div>
 				<br>
@@ -211,6 +213,7 @@
 					: null ?>
 				<form action="<?php echo Core\HTML::link('backend/orders/print/'.$obj->id) ?>" method="post" autocomplete="off" target="_blank"
 					  data-print-limit="<?php echo (Core\User::info()->role_id != 2 && Core\User::get_access_for_controller('afisha_print_unlimit') == 'edit') ? 'true' : 'false' ?>">
+
 					<div class="form-group">
 						<?php $seats = array_filter(explode(',', $obj->seats_keys)); ?>
 						<?php if (count($seats)): ?>
@@ -227,16 +230,15 @@
 							<?php endforeach; ?>
 						<?php endif ?>
 					</div>
+
 					<div class="form-actions">
 						<label class="checkerWrap-inline">
 							<input name="print-type" value="base" type="radio" checked>Обычная</label>
 						<label class="checkerWrap-inline">
 							<input name="print-type" value="termo" type="radio">Термопринтер</label>
 						<input class="btn btn-primary print_order_tickets" type="submit" value="Печать"
-							<?php echo ((Core\User::caccess() == 'edit'
-								OR Core\User::get_access_for_controller('order_print') == 'edit')
-								AND ($obj->created_at > time() - Core\Config::get('reserved_days') * 24 * 60 * 60 AND $obj->status != 'success')
-							) ? null : 'disabled' ?>
+							<?php echo (Core\User::info()->role_id == 2
+								OR ($obj->created_at > time() - Core\Config::get('reserved_days') * 24 * 60 * 60 AND $obj->status == 'success' )) ? null : 'disabled' ?>
 						/>
 					</div>
 				</form>
