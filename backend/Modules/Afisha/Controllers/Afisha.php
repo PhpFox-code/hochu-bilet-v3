@@ -215,6 +215,7 @@
                     'sectors' => $vSectors,
                     'tpl_folder' => $this->tpl_folder,
                     'tablename' => $this->tablename,
+                    'organizers' => DB::select()->from('users')->where('status', '=', 1)->where('role_id', '=', 9)->find_all(),
                 ), $this->tpl_folder.'/Form');
         }
         
@@ -298,6 +299,7 @@
                     'tpl_folder' => $this->tpl_folder,
                     'places_list' => DB::select()->from('places')->where('status', '=', 1)->find_all(),
                     'tablename' => $this->tablename,
+                    'organizers' => DB::select()->from('users')->where('status', '=', 1)->where('role_id', '=', 9)->find_all(),
                 ), $this->tpl_folder.'/Form');
         }
 

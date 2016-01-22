@@ -215,8 +215,7 @@
         </div>
     </div>
     <div class="col-md-2">
-        <div class="widget">
-
+        <div class="widget box">
             <div class="widgetHeader myWidgetHeader">
                 <div class="widgetTitle">
                     <i class="fa-reorder"></i>
@@ -226,22 +225,46 @@
             <div class="widgetContent">
                 <div class="form-vertical row-border">
                     <div class="form-group">
-                        <label class="control-label">Изображение</label>
                         <div class="">
                             <?php if (is_file( HOST.\Core\HTML::media('images/afisha/medium/'.$obj->image) )): ?>
                                 <a href="<?php echo \Core\HTML::media('images/afisha/medium/'.$obj->image); ?>" rel="lightbox">
-                                    <img src="<?php echo \Core\HTML::media('images/afisha/medium/'.$obj->image); ?>" />
+                                    <img src="<?php echo \Core\HTML::media('images/afisha/medium/'.$obj->image); ?>" style="max-width: 100%;"/>
                                 </a>
                                 <br />
                                 <a href="/backend/<?php echo \Core\Route::controller(); ?>/delete_image/<?php echo $obj->id; ?>">Удалить изображение</a>
                             <?php else: ?>
-                                <input type="file" name="file" />
+                                <input type="file" name="file" style="max-width: 100%;" />
                             <?php endif ?>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <?php if(Core\User::info()->role_id == 2): ?>
+            <div class="widget box">
+                <div class="widgetHeader myWidgetHeader box">
+                    <div class="widgetTitle">
+                        <i class="fa-reorder"></i>
+                        Организатор
+                    </div>
+                </div>
+                <div class="widgetContent">
+                    <div class="form-vertical row-border">
+                        <div class="form-group">
+                            <select name="FORM[organizer_id]" style="width: 100%;">
+                                <option value="0">Не выбрано</option>
+                                <?php if(count($organizers)): ?>
+                                    <?php foreach($organizers as $organizer): ?>
+                                        <option value="<?php echo $organizer->id; ?>" <?php echo $organizer->id == $obj->organizer_id ? 'selected' : null ?>
+                                            ><?php echo $organizer->name; ?></option>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
     </div>
     <?php if ( $obj->id ): ?>
         <input type="hidden" name="id" value="<?php echo $obj->id; ?>" />

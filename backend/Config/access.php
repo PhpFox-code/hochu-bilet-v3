@@ -63,6 +63,11 @@ return array(
         'customView' => 'boolean',
     ),
     array(
+        'name' => 'Отчеты организатору',
+        'module' => 'statistics',
+        'controller' => 'organizer',
+    ),
+    array(
         'name' => 'Города',
         'module' => 'cities',
         'controller' => 'cities',
