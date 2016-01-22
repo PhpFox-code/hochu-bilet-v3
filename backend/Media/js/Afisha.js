@@ -330,7 +330,8 @@ jQuery(document).ready(function($) {
         };
         $('#orderPlace').removeClass('clicked');
         var afishaId = $('input[name="id"]').val();
-        window.location.href = '/backend/afisha/'+afishaId+'/createOrder/'+key;
+        var broneType = $('input[name="brone-type"]:checked').length ? 1 : 0;
+        window.location.href = '/backend/afisha/'+afishaId+'/createOrder/'+key+'/'+broneType;
     }
     $('#orderPlace').click(function(event) {
         event.preventDefault();
@@ -492,7 +493,7 @@ jQuery(document).ready(function($) {
             event.preventDefault();
 
             var afisha_id = $('#afishaOrderParameters').data('id');
-
+            var admin_brone = $('#admin_brone:checked').val() ? 1 : 0;
             var admin_comment = $('#form_admin_comment').find('textarea[name="admin_comment"]').val();
 
             $.ajax({
@@ -500,8 +501,9 @@ jQuery(document).ready(function($) {
                 type: 'POST',
                 dataType: 'json',
                 data: {
-                    afisha_id: afisha_id,
-                    admin_comment : admin_comment
+                    order_id: afisha_id,
+                    admin_comment : admin_comment,
+                    admin_brone: admin_brone
                 },
             })
             .always(function(data) {

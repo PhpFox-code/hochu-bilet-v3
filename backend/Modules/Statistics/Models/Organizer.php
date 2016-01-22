@@ -84,7 +84,7 @@ class Organizer
             return null;
         }
 
-        $adminOrders = Orders::getList(array('afisha_id' => $poster->id, 'creator_id' => 1));
+        $adminOrders = Orders::getList(array('afisha_id' => $poster->id, 'admin_brone' => 0, 'creator_id' => 1));
         $siteOrders = Orders::getList(array('afisha_id' => $poster->id, 'creator_id' => null));
 
         $seatsByPrices = Seats::getList(array('grouping' => 'price_id'));

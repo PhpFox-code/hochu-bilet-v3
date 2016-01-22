@@ -52,6 +52,7 @@
 
 //            Count
             $count = DB::select(array(DB::expr('COUNT(*)'), 'count'))->from($this->tablename);
+            if (User::info()->role_id != 2) { $count->where('admin_brone', '=', 0); }
             if( $date_s !== NULL ) { $count->where( $this->tablename.'.created_at', '>=', $date_s ); }
             if( $date_po !== NULL ) { $count->where( $this->tablename.'.created_at', '<=', $date_po + 24 * 60 * 60 - 1 ); }
             if( $status !== NULL ) {
@@ -87,6 +88,7 @@
             if( $date_s ) { $result->where( $this->tablename.'.created_at', '>=', $date_s ); }
             if( $date_po ) { $result->where( $this->tablename.'.created_at', '<=', $date_po + 24 * 60 * 60 - 1 ); }
 //            if (User::info()->role_id != 2) { $result->where($this->tablename.'.creator_id', '=', User::info()->id);}
+            if (User::info()->role_id != 2) { $result->where('admin_brone', '=', 0); }
             if( $status !== NULL ) {
                 switch ($status) {
                     case 'brone':
@@ -139,6 +141,9 @@
 //            Set edit access for myself orders
             if ($result->creator_id == User::info()->id) {
                 User::factory()->_current_access = 'edit';
+            }
+            if (User::info()->role_id != 2 AND $result->admin_brone == 1) {
+                $this->no_access();
             }
 
             $afisha = DB::select('afisha.*', array('places.name', 'place'), 'places.filename')

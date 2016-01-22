@@ -9,6 +9,7 @@
         'backend/afisha/add' => 'afisha/afisha/add',
         'backend/afisha/{id:[0-9]*}/printTicket/{key}/{printType}' => 'afisha/afisha/printTicket',
         'backend/afisha/{id:[0-9]*}/createOrder/{key}' => 'afisha/afisha/createOrder',
+        'backend/afisha/{id:[0-9]*}/createOrder/{key}/{orderType}' => 'afisha/afisha/createOrder',
 
             // Orders
         'backend/orders/index' => 'afisha/orders/index',

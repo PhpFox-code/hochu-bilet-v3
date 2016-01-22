@@ -513,10 +513,11 @@
             foreach ($seats as $seat) {
                 $seatsId[] = $seat->id;
             }
-
+            $orderType = (int)Route::param('orderType');
             $data = array(
                 'afisha_id' => $afisha->id,
                 'is_admin' => User::info()->role_id == 2 ? 1 : 0,
+                'admin_brone' => $orderType,
                 'creator_id' => User::info()->id,
                 'seats_keys' => implode(',', $keys),
                 'created_at' => time(),
@@ -528,7 +529,7 @@
             if ($res) {
                 // Update status
                 $res2 = DB::update('seats')
-                    ->set(array('status' => 2, 'reserved_at' => time()))
+                    ->set(array('status' => ($orderType == 1 ? 3 : 2), 'reserved_at' => time()))
                     ->where('id', 'IN', $seatsId)
                     ->execute();
 

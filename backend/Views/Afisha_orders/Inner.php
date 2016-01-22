@@ -124,6 +124,10 @@
 								<textarea class="form-control" rows="8" name="admin_comment"><?php echo $obj->admin_comment ?></textarea>
 							</div>
 						</div>
+						<div class="form-group">
+							<label class="checkerWrap-inline">
+								<input name="admin-brone" id="admin_brone" value="1" type="checkbox" <?php echo $obj->admin_brone == 1 ? 'checked' : null; ?>>Бронь админа</label>
+						</div>
 						<div class="form-actions textright">
 							<button class="btn btn-primary" type="button" id="update_admin_comment" <?php echo (Core\User::caccess() != 'edit') ? 'disabled' : null ?>>Обновить</button>
 						</div>

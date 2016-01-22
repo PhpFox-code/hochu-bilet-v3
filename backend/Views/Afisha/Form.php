@@ -159,6 +159,10 @@
                                 <button class="btn btn-primary" style="margin-left: 30px;" id="orderPlace"
                                     <?php echo (Core\User::caccess() == 'edit'
                                         OR Core\User::get_access_for_controller('afisha_brone') == 'edit') ? null : 'disabled'; ?>>Забронировать</button>
+                                <?php if(Core\User::info()->role_id == 2): ?>
+                                    <label class="checkerWrap-inline">
+                                        <input name="brone-type" value="1" type="checkbox">Бронь админа</label>
+                                <?php endif; ?>
                             </div>
                             <div class="col-md-8">
                                 <input type="text" class="selected-order-seats" id="tag2-2" />

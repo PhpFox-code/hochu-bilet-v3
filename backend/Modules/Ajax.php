@@ -1034,18 +1034,45 @@
         public function updateAdminCommentAction(){
             $post = $_POST;
 
-            $afisha_id = $post['afisha_id'];
+            $order_id = $post['order_id'];
 
             $data = array(
-                'admin_comment' => nl2br($post['admin_comment'])
+                'admin_comment' => nl2br($post['admin_comment']),
+                'admin_brone' => $post['admin_brone'],
             );
 
-            if (!$afisha_id) {
+            if (!$order_id) {
                 die(json_encode(array('success' => false, 'message' => 'Ошибка получения данных')));
             }
+            // Get current order
+            $order = DB::select()->from('afisha_orders')->where('id', '=', (int)$order_id)->find();
+            $afisha = DB::select()->from('afisha')->where('id', '=', (int)$order->afisha_id)->find();
 
-            $res = \Core\Common::update('afisha_orders', $data)->where('id', '=', (int)$afisha_id)->execute();
+            $res = \Core\Common::update('afisha_orders', $data)->where('id', '=', (int)$order->id)->execute();
+
             if ($res) {
+                $prices = DB::select('id')->from('prices')->where('afisha_id', '=', (int)$afisha->id)->find_all();
+
+                $pricesArr = array();
+
+                $seatsData = array('updated_at' => time());
+                if ($post['admin_brone'] == 1 ) {
+                    $seatsData['status'] = 3;
+                } else {
+                    $seatsData['status'] = 2;
+                    $seatsData['reserved_at'] = time();
+                }
+
+                if (count($prices)) {
+                    foreach ($prices as $key => $value) {
+                        $pricesArr[] = $value->id;
+                    }
+                    $res2 = \Core\Common::update('seats', $seatsData)
+                        ->where('view_key', 'IN', array_filter(explode(',', $order->seats_keys)))
+                        ->where('price_id', 'IN', $pricesArr)
+                        ->execute();
+
+                }
                 die(json_encode(array('success' => true, 'message' => 'Данные сохранены', 'reload' => false)));
             }
             else {
