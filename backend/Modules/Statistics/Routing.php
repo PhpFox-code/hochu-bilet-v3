@@ -9,4 +9,5 @@
         'backend/organizer/index' => 'statistics/organizer/index',
         'backend/organizer/inner/{id:[0-9]*}' => 'statistics/organizer/inner',
         'backend/organizer/inner/{id:[0-9]*}/page/{page:[0-9]*}' => 'statistics/organizer/inner',
+        'backend/organizer/export/{id:[0-9]*}' => 'statistics/organizer/export',
     );

@@ -11,6 +11,8 @@
 						<div style="margin-bottom: 20px;" class="eventWrapp">
 							<div class="eventName">
 								<a class="fll" href="/backend/afisha/edit/<?php echo $poster->id; ?>"><?php echo $poster->name ?></a>
+								<a class="flr export" href="/backend/organizer/export/<?php echo $poster->id; ?>" target="_blank">Экспорт в Excel</a>
+								<span class="flr">&nbsp;</span>
 								<a class="flr printTable" href="#">Распечатать</a>
 							</div>
 							<div class="eventOrders">

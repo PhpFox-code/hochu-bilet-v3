@@ -457,13 +457,11 @@ table.dataTable.no-footer {
     font-weight: bold;
     text-decoration: underline;
 }
-.eventName a.printTable {
+.eventName a.printTable,
+.eventName a.export {
     font-size: 14px;
     font-weight: normal;
     color: #0c7bb4;
-}
-.organizer_stat th {
-    text-align: center;
 }
 
 .organizer_stat tfoot td {

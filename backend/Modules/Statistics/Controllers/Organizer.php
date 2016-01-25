@@ -107,4 +107,16 @@
                     'tpl_folder' => $this->tpl_folder,
                 ),$this->tpl_folder.'/Inner');
         }
+
+        function exportAction()
+        {
+            $poster = Model::getPoster(Route::param('id'));
+            if (!$poster) {
+                return Config::error();
+            }
+
+            $detailed = Model::getDetailed($poster);
+
+            Model::getExcel($detailed, $poster);
+        }
     }

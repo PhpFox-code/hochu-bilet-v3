@@ -17,6 +17,17 @@
     // require_once 'Plugins/I18n/I18n.php';
     // Autoload
     function autoload($className) {
+//        PHPExcel
+        if(strpos($className, 'PHPExcel') !== FALSE || strpos($className, 'Minify') !== FALSE) {
+            if( $className == 'PHPExcel' ) {
+                $className = 'PHPExcel_PHPExcel';
+            }
+            $fileName = HOST.'/Plugins/'.str_replace('_', DIRECTORY_SEPARATOR, $className).'.php';
+            if(file_exists($fileName)) {
+                require_once $fileName;
+                return false;
+            }
+        }
         // If I18n
         $arr = explode('\\', $className);
         if (end($arr) == 'I18n') { return; }

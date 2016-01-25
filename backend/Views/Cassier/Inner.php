@@ -11,6 +11,8 @@
                         <div style="margin-bottom: 20px;" class="eventWrapp">
                             <div class="eventName">
                                 <a class="fll" href="/backend/afisha/edit/<?php echo $afisha->id; ?>"><?php echo $afisha->name ?></a>
+                                <a class="flr export" href="#">Экспорт в Excel</a>
+                                <span class="flr">&nbsp;</span>
                                 <a class="flr printTable" href="#">Распечатать</a>
                             </div>
                             <div class="eventOrders">
