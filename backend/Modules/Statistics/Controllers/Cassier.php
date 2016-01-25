@@ -75,12 +75,12 @@
             $cassiers = $cassiers->find_all();
 
             $totalCntOrders = DB::select(array(DB::expr('COUNT(*)'), 'count'))->from('afisha_orders')
-                ->where('creator_id', '!=', null);
+                ->where('creator_id', '!=', null)->where('payer_id', '!=', null);
             $this->setFilter($totalCntOrders, $date_s, $date_po, $status, $eventId, $creatorId, 'afisha_orders');
             $totalCntOrders = $totalCntOrders->count_all();
 
             $totalOrdersPrice = 0;
-            $totalOrdersPriceQuery = DB::select()->from('afisha_orders')->where('creator_id', '!=', null);
+            $totalOrdersPriceQuery = DB::select()->from('afisha_orders')->where('creator_id', '!=', null)->where('payer_id', '!=', null);
             $this->setFilter($totalOrdersPriceQuery, $date_s, $date_po, $status, $eventId, $creatorId, 'afisha_orders');
             $totalOrdersPriceQuery = $totalOrdersPriceQuery->find_all();
             foreach ($totalOrdersPriceQuery as $order) {
@@ -95,18 +95,18 @@
                 $fullResult[$cassier->id]['user'] = $cassier;
 
                 $allOrders = DB::select(array(DB::expr('COUNT(*)'), 'count'))->from('afisha_orders')
-                    ->where('creator_id', '=', $cassier->id);
+                    ->where('payer_id', '=', $cassier->id);
                 $this->setFilter($allOrders, $date_s, $date_po, $status, $eventId, $creatorId, 'afisha_orders');
                 $allOrders = $allOrders->count_all();
                 $fullResult[$cassier->id]['totalOrders'] = $allOrders;
 
                 $successOrders = DB::select(array(DB::expr('COUNT(*)'), 'count'))->from('afisha_orders')
-                    ->where('creator_id', '=', $cassier->id)->where('status', '=', 'success');
+                    ->where('payer_id', '=', $cassier->id)->where('status', '=', 'success');
                 $this->setFilter($successOrders, $date_s, $date_po, $status, $eventId, $creatorId, 'afisha_orders');
                 $successOrders = $successOrders->count_all();
                 $fullResult[$cassier->id]['totalSuccessOrders'] = $successOrders;
 
-                $orders = DB::select()->from('afisha_orders')->where('creator_id', '=', $cassier->id);
+                $orders = DB::select()->from('afisha_orders')->where('payer_id', '=', $cassier->id);
                 $this->setFilter($orders, $date_s, $date_po, $status, $eventId, $creatorId, 'afisha_orders');
                 $orders = $orders->find_all();
 
@@ -181,7 +181,7 @@
 //            $this->setFilter($totalCntOrders, $date_s, $date_po, $status, $eventId, $creatorId, 'afisha_orders');
 //            $totalCntOrders = $totalCntOrders->count_all();
 
-            $ordersQuery = DB::select()->from('afisha_orders')->where('creator_id', '=', $cassier->id);
+            $ordersQuery = DB::select()->from('afisha_orders')->where('payer_id', '=', $cassier->id);
             $this->setFilter($ordersQuery, $date_s, $date_po, $status, $eventId, $creatorId, 'afisha_orders');
 
             $orders = $ordersQuery->order_by('created_at', 'DESC')->find_all();
@@ -222,7 +222,7 @@
             if ($eventId)
                 $query->where( $table.'.afisha_id', '=', $eventId );
             if ($creatorId)
-                $query->where( $table.'.creator_id', '=', $creatorId );
+                $query->where( $table.'.payer_id', '=', $creatorId );
 
             return $query;
         }
