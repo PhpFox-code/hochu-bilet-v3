@@ -80,6 +80,9 @@
                                     <td>
                                         <?php if($obj->is_admin): ?>
                                             <b>Админ</b>
+                                            <?php if($obj->admin_brone): ?>
+                                                <i> (Бронь админа)</i>
+                                            <?php endif; ?>
                                         <?php elseif ($obj->creator_id): ?>
                                             <b><?php echo $obj->creator_name; ?></b>
                                         <?php else: ?>
