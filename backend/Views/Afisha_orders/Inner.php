@@ -162,7 +162,8 @@
 							</div>
 						</div>
 						<div class="form-actions textright">
-							<button class="btn btn-primary" type="button" id="update_user_info" <?php echo (Core\User::caccess() != 'edit') ? 'disabled' : null ?>>Обновить</button>
+							<button class="btn btn-primary" type="button" id="update_user_info" <?php echo (Core\User::caccess() != 'edit'
+								OR ($obj->status == 'success' && Core\User::info()->role_id != 2)) ? 'disabled' : null ?>>Обновить</button>
 						</div>
 					</form>				
 				</div>

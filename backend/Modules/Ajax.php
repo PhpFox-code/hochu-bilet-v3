@@ -980,6 +980,11 @@
             if (!$afisha_id) {
                 die(json_encode(array('success' => false, 'message' => 'Ошибка получения данных')));
             }
+
+            if ($status != 'success' && User::info()->role_id != 2) {
+                die(json_encode(array('success' => false, 'message' => 'У Вас нет прав для изменения статуса')));
+            }
+
             $orderData = array('status' => $status);
             if ($status == 'success') {
                 $orderData['payer_id'] = User::info()->id;
