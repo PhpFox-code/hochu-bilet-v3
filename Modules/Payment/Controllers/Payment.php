@@ -80,25 +80,32 @@
             $orderId = (int)Route::param('id');
             if ($orderId AND isset($_POST) AND count($_POST) > 0) {
 
-                $privateKey = Config::get('private_key');
-                $data = $_POST;
+                $data = json_decode(base64_decode($_POST['data']), true);
+
 	        	$order = DB::select()->from('afisha_orders')->where('id', '=', $orderId)->find();
 	        	if (!$order) {
 	        		return Config::error();
 	        	}
                 // update status
-                if ($data['status']) {
-                    Common::update('afisha_orders', array('status' => $data['status']))->where('id', '=', $orderId)->execute();
-                }
+                if ($data['status'] && $data['status'] == 'success') {
+                    Common::update('afisha_orders', array('status' => 'success', 'updated_at' => time()))->where('id', '=', $orderId)->execute();
 
-                // Change status for seats
-                if ($data['status'] == 'success') {
-                    $seatsArr = explode(',', $order->seats_id);
-                    Common::update('seats', array('status' => 3))->where('id', 'IN', $seatsArr)->execute();
+                    // Change status for seats
+                    $prices = DB::select('id')->from('prices')->where('afisha_id', '=', $order->afisha_id)->find_all();
+                    $pricesArr = array();
+                    if (count($prices)) {
+                        foreach ($prices as $key => $value) {
+                            $pricesArr[] = $value->id;
+                        }
+                        $res2 = \Core\Common::update('seats', array('status' => 3))
+                            ->where('view_key', 'IN', array_filter(explode(',', $order->seats_keys)))
+                            ->where('price_id', 'IN', $pricesArr)
+                            ->execute();
+                    }
                 }
         	}
 
-        	HTTP::redirect('after_payment/');
+//        	HTTP::redirect('after_payment/');
         	return;
         }
     }
