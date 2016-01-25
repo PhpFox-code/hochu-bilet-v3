@@ -66,6 +66,7 @@
             if ($_POST) {
                 $post = $_POST['FORM'];
                 $post['status'] = Arr::get( $_POST, 'status', 0 );
+                $post['see_all_cashier_stat'] = Arr::get( $_POST, 'see_all_cashier_stat', 0 );
                 if( Model::valid($post) ) {
                     $res = Model::insert(Model::$table, $post)->execute();
                     if($res[1]) {
@@ -97,6 +98,7 @@
             if ($_POST) {
                 $post = $_POST['FORM'];
                 $post['status'] = Arr::get( $_POST, 'status', 0 );
+                $post['see_all_cashier_stat'] = Arr::get( $_POST, 'see_all_cashier_stat', 0 );
                 if( Model::valid($post) ) {
                     $res = Model::update(Model::$table, $post)->where('id', '=', Route::param('id'))->execute();
                     if($res) {

@@ -521,7 +521,7 @@
                 'creator_id' => User::info()->id,
                 'seats_keys' => implode(',', $keys),
                 'created_at' => time(),
-                'status' => null     // Если нужно оформлять заказ сразу как оплаченый, нужно на 454 изменить значение
+                'status' => ''     // Если нужно оформлять заказ сразу как оплаченый, нужно на 454 изменить значение
             );
             
             $res = DB::insert('afisha_orders', array_keys($data))->values(array_values($data))->execute();

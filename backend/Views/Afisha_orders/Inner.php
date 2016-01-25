@@ -47,19 +47,24 @@
 								<a href="/backend/users/edit/<?php echo $payer->id; ?>"><?php echo $payer->name; ?></a>
 							</div>
 						<?php endif; ?>
+						<?php if($obj->status != 'success' AND $obj->created_at < time() - Core\Config::get('reserved_days') * 24 * 60 * 60): ?>
+							<p class="info-block">Бронь просрочена</p>
+						<?php endif; ?>
 						<div class="rowSection">
 							<div class="table-footer clearFix">
 								<div class="col-md-12">
 									<div class="input-group">
 										<select class="form-control" name="order_status" id="order_status"
-											<?php echo ($obj->status == 'success' AND Core\User::info()->role_id != 2) ? 'disabled' : null ?>>
+											<?php echo (($obj->status == 'success' AND Core\User::info()->role_id != 2)
+												OR ($obj->status != 'success' AND $obj->created_at < time() - Core\Config::get('reserved_days') * 24 * 60 * 60)) ? 'disabled' : null ?>>
 											<option value="" <?php echo is_null($obj->status) ? 'selected' : ''; ?>>Не оплачено</option>
 											<option value="success" <?php echo $obj->status == 'success' ? 'selected' : ''; ?>>Оплачено</option>
 										</select>
 										<span class="input-group-btn">
 											<div class="col-md-12">
 											<button class="btn btn-primary" id="update_order_status" type="button"
-												<?php echo ($obj->status == 'success' AND Core\User::info()->role_id != 2) ? 'disabled' : null ?>>Обновить</button>
+												<?php echo (($obj->status == 'success' AND Core\User::info()->role_id != 2)
+													OR ($obj->status != 'success' AND $obj->created_at < time() - Core\Config::get('reserved_days') * 24 * 60 * 60)) ? 'disabled' : null ?>>Обновить</button>
 											</div>
 										</span>
 									</div>
@@ -121,8 +126,8 @@
 	</div>
 	<div class="col-md-5">
 		<div class="widget box">
-			<div class="widgetHeader"><div class="widgetTitle"><i class="fa-user"></i>Заказчик</div></div>
-			<?php if ($obj->is_admin): ?>
+			<?php if ($obj->is_admin && Core\User::info()->role_id == 2): ?>
+				<div class="widgetHeader"><div class="widgetTitle"><i class="fa-user"></i>Примечание</div></div>
 				<div class="widgetContent" id="form_admin_comment">
 					<form class="form-vertical row-border">
 						<div class="form-group">
@@ -141,6 +146,7 @@
 					</form>
 				</div>
 			<?php else: ?>
+				<div class="widgetHeader"><div class="widgetTitle"><i class="fa-user"></i>Заказчик</div></div>
 				<div class="widgetContent" id="form_user_info">
 					<form class="form-vertical row-border">
 						<div class="form-group">
@@ -198,7 +204,9 @@
 					</div>
 					<div class="col-md-3">
 						<button class="btn btn-primary" style="margin-top: 30px;" id="update_seats" type="button"
-							<?php echo (Core\User::caccess() != 'edit' OR ($obj->status == 'success' && Core\User::info()->role_id != 2)) ? 'disabled' : null ?>>Сохранить изменения</button>
+							<?php echo (($obj->status == 'success' && Core\User::info()->role_id != 2)
+								OR ($obj->created_at < time() - Core\Config::get('reserved_days') * 24 * 60 * 60
+									AND $obj->status != 'success' )) ? 'disabled' : null ?>>Сохранить изменения</button>
 					</div>
 				</div>
 				<br>
@@ -243,6 +251,12 @@
 							<input name="print-type" value="base" type="radio" checked>Обычная</label>
 						<label class="checkerWrap-inline">
 							<input name="print-type" value="termo" type="radio">Термопринтер</label>
+						<?php if($obj->status != 'success' AND $obj->created_at < time() - Core\Config::get('reserved_days') * 24 * 60 * 60): ?>
+							<p class="info-block">Бронь просрочена</p>
+						<?php endif; ?>
+						<?php if($obj->status != 'success' AND $obj->created_at > time() - Core\Config::get('reserved_days') * 24 * 60 * 60): ?>
+							<p class="info-block">Заказ не оплачен</p>
+						<?php endif; ?>
 						<input class="btn btn-primary print_order_tickets" type="submit" value="Печать"
 							<?php echo (Core\User::info()->role_id == 2
 								OR ($obj->created_at > time() - Core\Config::get('reserved_days') * 24 * 60 * 60 AND $obj->status == 'success' )) ? null : 'disabled' ?>
@@ -258,7 +272,7 @@
 					<div class="widgetTitle"><i class="fa-eraser"></i>Сбросить историю печати</div>
 				</div>
 				<div class="widgetContent">
-					<p class="info-block">Сбрасывает историю печати для выбранных билетов. Используйте если кассиру нужно перепечатать билеткы.
+					<p class="info-block">Используйте если кассиру нужно перепечатать билеты.
 						<br>Для сброса истории печати билетов - отметьте необходимые билеты и нажмите Сбросить</p>
 					<form action="" autocomplete="off" id="reset_seats">
 						<div class="form-group">

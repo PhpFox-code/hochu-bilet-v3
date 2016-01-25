@@ -4,7 +4,7 @@
             <div class="widgetContent">
                 <?php echo Core\View::tpl(array('creators' => $creators, 'events' => $events), 'Cassier/Filter'); ?>
 
-                <?php if (Core\User::info()->role_id == 2): ?>
+                <?php if (Core\User::info()->role_id == 2 OR Core\User::info()->see_all_cashier_stat == 1): ?>
                     <div class="rowSection">
                         <!-- Total orders count-->
                         <div class="col-md-6">
@@ -57,10 +57,10 @@
                                 <?php $obj = $el['user']; ?>
                                 <tr data-id="<?php echo $obj->id; ?>">
                                     <td class="hidden-ss">
-                                        <a href="/backend/cassier/inner/<?php echo $obj->id .'?'. end(explode('?', $_SERVER['REQUEST_URI'])); ?>"><?php echo $obj->id; ?></a>
+                                        <a href="/backend/cassier/inner/<?php echo $obj->id .'?'. explode('?', $_SERVER['REQUEST_URI'])[1]; ?>"><?php echo $obj->id; ?></a>
                                     </td>
                                     <td>
-                                        <a href="/backend/cassier/inner/<?php echo $obj->id .'?'. end(explode('?', $_SERVER['REQUEST_URI'])); ?>"><?php echo $obj->name; ?></a>
+                                        <a href="/backend/cassier/inner/<?php echo $obj->id .'?'. explode('?', $_SERVER['REQUEST_URI'])[1]; ?>"><?php echo $obj->name; ?></a>
                                     </td>
                                     <td>
                                         <?php if ($obj->email): ?>
@@ -81,7 +81,7 @@
                                     <td><?php echo $el['countSeats']; ?></td>
                                     <td class="sum-column"><?php echo $el['totalPrice'] ?> грн</td>
                                     <td>
-                                        <a href="/backend/cassier/inner/<?php echo $obj->id .'?'. end(explode('?', $_SERVER['REQUEST_URI']));?>" title="Подробно">Подробно</a>
+                                        <a href="/backend/cassier/inner/<?php echo $obj->id .'?'. explode('?', $_SERVER['REQUEST_URI'])[1];?>" title="Подробно">Подробно</a>
                                     </td>
                                 </tr>
                             <?php endforeach ?>

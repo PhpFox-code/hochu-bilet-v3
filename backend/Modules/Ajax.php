@@ -1013,6 +1013,7 @@
             $orderData = array('status' => $status);
             if ($status == 'success') {
                 $orderData['payer_id'] = User::info()->id;
+                $orderData['printed_seats'] = '';
             } else {
                 $orderData['payer_id'] = 0;
             }

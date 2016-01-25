@@ -17,7 +17,7 @@
                         <?php endforeach ?>
                     </select>
                 </div>
-                <?php if (count($creators) && Core\User::info()->role_id == 2): ?>
+                <?php if (count($creators) && (Core\User::info()->role_id == 2 OR Core\User::info()->see_all_cashier_stat == 1)): ?>
                     <div style="display: inline-block;">
                         <label class="control-label" style="display: block;">Менеджер</label>
                         <select name="creator_id">

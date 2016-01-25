@@ -36,6 +36,19 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="control-label">Может видеть продажи всех кассиров (только для кассира)</label>
+                        <div class="">
+                            <label class="checkerWrap-inline">
+                                <input name="see_all_cashier_stat" value="0" type="radio" <?php echo (!$obj->see_all_cashier_stat AND $obj) ? 'checked' : ''; ?>>
+                                Нет
+                            </label>
+                            <label class="checkerWrap-inline">
+                                <input name="see_all_cashier_stat" value="1" type="radio" <?php echo ($obj->see_all_cashier_stat OR !$obj) ? 'checked' : ''; ?>>
+                                Да
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label">Имя</label>
                         <div class="">
                             <input class="form-control valid" name="FORM[name]" type="text" value="<?php echo $obj->name; ?>" />

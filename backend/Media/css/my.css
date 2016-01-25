@@ -470,3 +470,8 @@ p.info-block {
     border: 1px solid #E4C467;
     border-radius: 4px;
 }
+button[type="button"]:disabled {
+    cursor: not-allowed !important;
+    border-color: #ddd !important;
+    color: #999 !important;
+}

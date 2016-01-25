@@ -39,7 +39,7 @@
         }
 
         function indexAction () {
-            if (User::info()->role_id != 2) {
+            if (User::info()->role_id != 2 && User::info()->see_all_cashier_stat == 0) {
                 HTTP::redirect('/backend/cassier/inner/'.(User::info()->id));
             }
 //            Set filter vars
@@ -56,7 +56,7 @@
                 $eventId = Arr::get($_GET, 'event');
             if (Arr::get($_GET, 'creator_id') != 0)
                 $creatorId = Arr::get($_GET, 'creator_id');
-            if (User::info()->role_id != 2)
+            if (User::info()->role_id != 2 && User::info()->see_all_cashier_stat == 0)
                 $creatorId = User::info()->id;
 
 //            Select all admins
@@ -147,7 +147,7 @@
         }
 
         function innerAction () {
-            if (User::info()->role_id != 2 && User::info()->id != Route::param('id')) {
+            if (User::info()->role_id != 2 && User::info()->id != Route::param('id') && User::info()->see_all_cashier_stat == 0) {
                 $this->no_access();
             }
 

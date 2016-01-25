@@ -62,9 +62,11 @@ jQuery(document).ready(function($) {
     // Adding price row and init color
     $('#addPrice').click(function(event) {
         event.preventDefault();
+
         var oneEl = $('#price_tpl > div').clone();
         $(oneEl).find('.selColor').val('#888888');
         $('.prices-list').append(oneEl);
+        $('.prices-list').css('display', 'block');
         //start colorpicker
         $('.prices-list .selColor').each(function(){
         	var it = $(this);
@@ -404,7 +406,7 @@ jQuery(document).ready(function($) {
             .always(function(data) {
                 if (data.success === true) {
                     generate(data.message, 'success');
-                    $('#update_order_status').trigger('click');
+                    //$('#update_order_status').trigger('click');
                     if (data.reload == true) {
                         setTimeout(function(){
                             location.reload();
