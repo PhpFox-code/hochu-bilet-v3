@@ -84,8 +84,8 @@ class Organizer
             return null;
         }
 
-        $adminOrders = Orders::getList(array('afisha_id' => $poster->id, 'admin_brone' => 0, 'payer_id' => 1));
-        $siteOrders = Orders::getList(array('afisha_id' => $poster->id, 'payer_id' => null));
+        $adminOrders = Orders::getList(array('afisha_id' => $poster->id, 'admin_brone' => 1));
+        $siteOrders = Orders::getList(array('afisha_id' => $poster->id, 'admin_brone' => 0));
 
         $seatsByPrices = Seats::getList(array('grouping' => 'price_id'));
         $result = array();
@@ -109,8 +109,6 @@ class Organizer
                 foreach ((array)$seats as $seat) {
                     if (in_array($seat, $arrPriceSeats)) {
                         $result[$key]['admin_brone_quantity']++;
-                        if ($v->status == 'success')
-                            $soldQuantity++;
                     }
                 }
             }
@@ -122,16 +120,18 @@ class Organizer
                 $seats = array_filter(explode(',', $v->seats_keys));
                 foreach ((array)$seats as $seat) {
                     if (in_array($seat, $arrPriceSeats)) {
-                        $result[$key]['site_brone_quantity']++;
-                        if ($v->status == 'success')
+                        if ($v->status == 'success') {
                             $soldQuantity++;
+                        } else {
+                            $result[$key]['site_brone_quantity']++;
+                        }
                     }
                 }
             }
             $result[$key]['site_brone_sum'] = $result[$key]['site_brone_sum'] * $price->price;
 
 //            Residue
-            $result[$key]['residue_quantity'] = $result[$key]['coming_quantity'] - $result[$key]['admin_brone_quantity'] + $result[$key]['site_brone_quantity'];
+            $result[$key]['residue_quantity'] = $result[$key]['coming_quantity'] - $result[$key]['admin_brone_quantity'] - $result[$key]['site_brone_quantity'] - $soldQuantity;
             $result[$key]['residue_sum'] = $result[$key]['residue_quantity'] * $price->price;
 
 //            Sold
