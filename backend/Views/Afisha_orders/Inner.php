@@ -40,7 +40,13 @@
 			<div class="widgetContent">
 				<div class="widget box">
 					<div class="widgetHeader"><div class="widgetTitle"><i class="fa-clock-o"></i>Статус оплаты</div></div>
-					<div class="widgetContent" style="padding-top: 0;">						
+					<div class="widgetContent" style="padding-top: 0;">	
+						<?php if($obj->payer_id != 0 && Core\User::info()->role_id == 2): ?>
+							<div class="">
+								<span>Принял оплату:</span>
+								<a href="/backend/users/edit/<?php echo $payer->id; ?>"><?php echo $payer->name; ?></a>
+							</div>
+						<?php endif; ?>
 						<div class="rowSection">
 							<div class="table-footer clearFix">
 								<div class="col-md-12">
@@ -245,6 +251,39 @@
 				</form>
 			</div>
 		</div>
+
+		<?php if(Core\User::info()->role_id == 2): ?>
+			<div class="widget box">
+				<div class="widgetHeader">
+					<div class="widgetTitle"><i class="fa-eraser"></i>Сбросить историю печати</div>
+				</div>
+				<div class="widgetContent">
+					<p class="info-block">Сбрасывает историю печати для выбранных билетов. Используйте если кассиру нужно перепечатать билеткы.
+						<br>Для сброса истории печати билетов - отметьте необходимые билеты и нажмите Сбросить</p>
+					<form action="" autocomplete="off" id="reset_seats">
+						<div class="form-group">
+							<?php $seats = array_filter(explode(',', $obj->seats_keys)); ?>
+							<?php if (count($seats)): ?>
+								<?php foreach ($seats as $seat): ?>
+									<label class="checkerWrap ckbxWrap">
+										<?php if (strpos($obj->printed_seats, $seat) !== false): ?>
+											<input name="RESET_SEATS[]" value="<?php echo $seat ?>" type="checkbox" checked>
+										<?php else: ?>
+											<input name="RESET_SEATS[]" value="<?php echo $seat ?>" type="checkbox" disabled="disabled">
+										<?php endif; ?>
+										<span class=""><?php echo $seatsStr[$seat] ?></span>
+									</label>
+								<?php endforeach; ?>
+							<?php endif ?>
+						</div>
+
+						<div class="form-actions">
+							<input class="btn btn-warning reset_order_seats" type="submit" value="Сбросить"/>
+						</div>
+					</form>
+				</div>
+			</div>
+		<?php endif; ?>
 	</div>
 </div>
 <span id="afishaOrderParameters" data-id="<?php echo $obj->id; ?>"></span>
@@ -263,5 +302,43 @@
 				}
 			}, 100);
 		});
+
+//		Reset for admin
+		if($('#reset_seats').length) {
+			$('#reset_seats').submit(function(e){
+				e.preventDefault();
+
+				var seats = $('input[name="RESET_SEATS[]"]:checked').map(function() {
+					return this.value;
+				}).get();
+
+				if (seats.length == 0) {
+					generate('Не выбраны места для сброса', 'warning');
+					return false;
+				}
+
+				if (!confirm('Вы действительно хотите сбросить историю печати? Это позволит кассирам распечатать билеты еще раз')) {
+					return false;
+				}
+
+				$.post(
+					'/backend/ajax/resetSeats',
+					{
+						afisha_id: $('#afishaOrderParameters').data('id'),
+						seats: seats
+					},
+					function(data) {
+						if (data.success == true) {
+							generate(data.message, 'success');
+							$('input[name="RESET_SEATS[]"]:checked').prop('disabled', true).prop('checked', false)
+								.parent('label').removeClass('checked').addClass('disabled');
+						} else {
+							generate(data.message, 'warning');
+						}
+					},
+					'json'
+				);
+			});
+		}
 	});
 </script>

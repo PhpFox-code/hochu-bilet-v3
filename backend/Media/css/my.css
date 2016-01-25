@@ -464,3 +464,9 @@ table.dataTable.no-footer {
 .organizer_stat tfoot td {
     font-weight: bold;
 }
+p.info-block {
+    background-color: #FFE088;
+    padding: 5px;
+    border: 1px solid #E4C467;
+    border-radius: 4px;
+}

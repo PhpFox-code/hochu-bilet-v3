@@ -955,6 +955,31 @@
             }
         }
 
+        public function resetSeatsAction(){
+            $post = $_POST;
+
+            $afisha_id = $post['afisha_id'];
+            $list_keys = $post['seats'];
+
+            if (!$afisha_id OR count($list_keys) == 0) {
+                die(json_encode(array('success' => false, 'message' => 'Ошибка получения данных')));
+            }
+
+            $afisha = DB::select()->from('afisha_orders')->where('id', '=', (int)$afisha_id)->find();
+            $oldPrintSeats = $afisha->printed_seats;
+            $oldPrintSeats = array_filter(explode(',', $oldPrintSeats));
+
+            $newSeats = array_diff($oldPrintSeats, $list_keys);
+            $newSeats = implode(',', (array)$newSeats);
+
+            $res = \Core\Common::update('afisha_orders', array('printed_seats' => $newSeats))->where('id', '=', (int)$afisha_id)->execute();
+            if ($res) {
+                die(json_encode(array('success' => true, 'message' => 'Выбранные билеты сброшены')));
+            }
+            else {
+                die(json_encode(array('success' => false, 'message' => 'Ошибка обновления данных')));
+            }
+        }
 
         public function updateOrderStatusAction(){
             $post = $_POST;

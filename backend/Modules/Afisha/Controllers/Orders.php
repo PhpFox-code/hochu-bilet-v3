@@ -226,6 +226,11 @@
             }
             $map = View::tpl(array('map' => $innerMap), 'Map/Main');
 
+            $payer = null;
+            if($result->payer_id != 0) {
+                $payer = DB::select()->from('users')->where('id', '=', $result->payer_id)->find();
+            }
+
             $this->_seo['h1'] = 'Заказ №' . Route::param('id');
             $this->_seo['title'] = 'Заказ №' . Route::param('id');
             $this->setBreadcrumbs('Заказ №' . Route::param('id'), 'backend/afisha_orders/edit/'.(int) Route::param('id'));
@@ -240,6 +245,7 @@
                     'tpl_folder' => $this->tpl_folder,
                     'tablename' => $this->tablename,
                     'seatsStr' => $seatsStr,
+                    'payer' => $payer,
                 ), $this->tpl_folder.'/Inner');
         }
 
