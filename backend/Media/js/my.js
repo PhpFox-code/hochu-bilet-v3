@@ -371,4 +371,12 @@ $(document).ready(function(){
             $('#city').trigger('change');
         };
     });
+
+    if ($('.printTable').length) {
+        $('.printTable').click(function(e){
+            e.preventDefault();
+
+            $(this).closest('.eventWrapp').printElement();
+        });
+    }
 });

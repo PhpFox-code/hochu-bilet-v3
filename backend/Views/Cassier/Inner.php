@@ -8,9 +8,10 @@
                 <div class="checkbox-wrap">
                     <?php foreach($afishaGroups as $key => $value): ?>
                         <?php $afisha = $value['afisha']; ?>
-                        <div style="margin-bottom: 20px;">
+                        <div style="margin-bottom: 20px;" class="eventWrapp">
                             <div class="eventName">
-                                <a href="/backend/afisha/edit/<?php echo $afisha->id; ?>"><?php echo $afisha->name ?></a>
+                                <a class="fll" href="/backend/afisha/edit/<?php echo $afisha->id; ?>"><?php echo $afisha->name ?></a>
+                                <a class="flr printTable" href="#">Распечатать</a>
                             </div>
                             <div class="eventOrders">
                                 <?php echo Core\View::tpl(array('result' => $value['orders'], 'afisha' => $afisha,

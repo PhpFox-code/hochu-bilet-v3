@@ -70,6 +70,7 @@
 <script src="<?php echo Core\HTML::bmedia('js/jquery.magnific-popup.min.js'); ?>"></script>
 <!-- <script src="http://maps.google.com/maps/api/js?sensor=false"></script> -->
 <script src="<?php echo Core\HTML::bmedia('js/jquery.minicolors.js'); ?>"></script>
+<script src="<?php echo Core\HTML::bmedia('js/jquery.printElement.js'); ?>"></script>
 
 <script src="<?php echo Core\HTML::bmedia('js/tinymce/tinymce.min.js'); ?>"></script>
 

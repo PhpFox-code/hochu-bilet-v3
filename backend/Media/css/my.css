@@ -449,6 +449,7 @@ table.dataTable.no-footer {
     background-color: #F9F9F9;
     padding: 5px;
     border: 1px solid #DDD;
+    height: 20px;
 }
 .eventName a {
     font-size: 19px;
@@ -456,7 +457,11 @@ table.dataTable.no-footer {
     font-weight: bold;
     text-decoration: underline;
 }
-
+.eventName a.printTable {
+    font-size: 14px;
+    font-weight: normal;
+    color: #0c7bb4;
+}
 .organizer_stat th {
     text-align: center;
 }
@@ -474,4 +479,10 @@ button[type="button"]:disabled {
     cursor: not-allowed !important;
     border-color: #ddd !important;
     color: #999 !important;
+}
+.fll {
+    float: left;
+}
+.flr {
+    float: right;
 }

@@ -8,9 +8,10 @@
 				<div class="checkbox-wrap">
 					<?php foreach($result as $key => $item): ?>
 						<?php $poster = $item['poster']; ?>
-						<div style="margin-bottom: 20px;">
+						<div style="margin-bottom: 20px;" class="eventWrapp">
 							<div class="eventName">
-								<a href="/backend/afisha/edit/<?php echo $poster->id; ?>"><?php echo $poster->name ?></a>
+								<a class="fll" href="/backend/afisha/edit/<?php echo $poster->id; ?>"><?php echo $poster->name ?></a>
+								<a class="flr printTable" href="#">Распечатать</a>
 							</div>
 							<div class="eventOrders">
 								<table class="table table-striped table-bordered organizer_stat" cellspacing="0" width="100%">
