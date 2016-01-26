@@ -16,6 +16,7 @@
     use Core\User;
     use Modules\Afisha\Models\Map;
     use backend\Modules\Afisha\Models\Afisha;
+    use backend\Modules\Statistics\Models\Cassier as Model;
 
 
     class Cassier extends \Backend\Modules\Base {
@@ -176,16 +177,10 @@
             $this->_seo['title'] = 'Статистика по ' . $cassier->name;
             $this->setBreadcrumbs('Статистика по ' . $cassier->name);
 
-//            $totalCntOrders = DB::select(array(DB::expr('COUNT(*)'), 'count'))->from('afisha_orders')
-//                ->where('creator_id', '=', $cassier->id);
-//            $this->setFilter($totalCntOrders, $date_s, $date_po, $status, $eventId, $creatorId, 'afisha_orders');
-//            $totalCntOrders = $totalCntOrders->count_all();
-
             $ordersQuery = DB::select()->from('afisha_orders')->where('payer_id', '=', $cassier->id);
             $this->setFilter($ordersQuery, $date_s, $date_po, $status, $eventId, $creatorId, 'afisha_orders');
 
             $orders = $ordersQuery->order_by('created_at', 'DESC')->find_all();
-//            $pager = Pager::factory( $this->page, $totalCntOrders, $this->limit )->create();
 
 //            Make array with all need data
             $afishaGroups = array();
@@ -225,5 +220,28 @@
                 $query->where( $table.'.payer_id', '=', $creatorId );
 
             return $query;
+        }
+
+        function exportAction()
+        {
+            $afishaId = (int)Route::param('id');
+
+            //  Select current user
+            $cassier = DB::select()
+                ->from($this->tablename)
+                ->where($this->tablename.'.id', '=', (int)Route::param('user_id'))
+                ->find();
+
+//            Select afisha
+            $afisha = DB::select()->from('afisha')->where('id', '=', $afishaId)->find();
+
+            if (!$cassier OR !$afisha) {
+                return Config::error();
+            }
+
+            $orders = DB::select()->from('afisha_orders')->where('payer_id', '=', $cassier->id)
+                ->where('afisha_id', '=', $afishaId)->order_by('id', 'DESC')->find_all();
+
+            Model::getExcel($orders, $afisha);
         }
     }

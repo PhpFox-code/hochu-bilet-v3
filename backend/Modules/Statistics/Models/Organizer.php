@@ -252,6 +252,13 @@ class Organizer
         $sheet->setCellValueByColumnAndRow(9, $row, $totSoldQuantity);
         $sheet->setCellValueByColumnAndRow(10, $row, $totSoldSum);
 
+//        Set auto width
+        foreach (range('A', $xls->getActiveSheet()->getHighestDataColumn()) as $col) {
+            $xls->getActiveSheet()
+                ->getColumnDimension($col)
+                ->setAutoSize(true);
+        }
+
 //        Save file
         // Выводим HTTP-заголовки
         header ( "Expires: Mon, 1 Apr 1974 05:00:00 GMT" );

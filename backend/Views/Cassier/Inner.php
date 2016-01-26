@@ -11,7 +11,7 @@
                         <div style="margin-bottom: 20px;" class="eventWrapp">
                             <div class="eventName">
                                 <a class="fll" href="/backend/afisha/edit/<?php echo $afisha->id; ?>"><?php echo $afisha->name ?></a>
-                                <a class="flr export" href="#">Экспорт в Excel</a>
+                                <a class="flr export" href="/backend/cassier/export/<?php echo Core\Route::param('id'); ?>/<?php echo $afisha->id ?>">Экспорт в Excel</a>
                                 <span class="flr">&nbsp;</span>
                                 <a class="flr printTable" href="#">Распечатать</a>
                             </div>
