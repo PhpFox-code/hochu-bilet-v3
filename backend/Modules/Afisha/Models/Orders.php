@@ -19,7 +19,7 @@ class Orders
         $query = DB::select()->from(self::$table);
         if (count($filter)) {
             foreach ($filter as $key => $value) {
-                if (in_array($key, array('grouping'))) continue;
+                if (in_array($key, array('grouping', 'as_array'))) continue;
                 $query->where($key, '=', $value);
             }
         }
@@ -31,7 +31,11 @@ class Orders
             }
             return $result;
         } else {
-            return $query->find_all();
+            if ($filter['as_array']) {
+                return $query->as_assoc()->execute();
+            } {
+                return $query->find_all();
+            }
         }
     }
 }

@@ -2,6 +2,7 @@
 	namespace backend\Modules\Afisha\Models;
 
 	use Core\QB\DB;
+	use Modules\Afisha\Models\Map;
 
 	class Afisha 
 	{
@@ -42,4 +43,40 @@
 			return self::$costs;
 		}
 
+		public static function getMapSeats($fileName, Array $seats = array())
+		{
+			$result = array();
+			try {
+				$dom = Map::factory()->loadFile($fileName)->getDomInstance();
+
+				$gTag = $dom->getElementsByTagName('g');
+
+				foreach ($gTag as $el) {
+					$id = $el->getAttribute('id');
+					if (in_array($id, $seats)) {
+						if($el->parentNode->hasAttribute('data-plase'))
+						{
+							$place = $el->parentNode->getAttribute('data-plase');
+						}
+						elseif ($el->parentNode->parentNode->hasAttribute('data-plase'))
+						{
+							$place = $el->parentNode->parentNode->getAttribute('data-plase');
+						}
+
+						if ($place) {
+							$dataInit = json_decode($el->getAttribute('data-init'));
+							$place = str_replace(' / места:', '', $place);
+							$place = trim($place);
+							$result[$id] = array(
+								'row' => $place,
+								'seat' => $dataInit->seat
+							);
+						}
+					}
+				}
+			} catch(\Exception $e) {
+				die('Ошибка загрузки карты');
+			}
+			return $result;
+		}
 	}

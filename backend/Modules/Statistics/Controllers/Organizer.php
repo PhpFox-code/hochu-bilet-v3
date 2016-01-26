@@ -119,4 +119,16 @@
 
             Model::getExcel($detailed, $poster);
         }
+
+        function detailed_exportAction()
+        {
+            $poster = Model::getPoster(Route::param('id'));
+            if (!$poster) {
+                return Config::error();
+            }
+
+            $detailed = Model::getFullDetailed($poster);
+
+            Model::getFullExcel($detailed, $poster);
+        }
     }

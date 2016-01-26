@@ -7,10 +7,12 @@
  */
 namespace backend\Modules\Statistics\Models;
 
+use backend\Modules\Afisha\Models\Afisha;
 use Core\QB\DB;
 use backend\Modules\Afisha\Models\Prices;
 use backend\Modules\Afisha\Models\Orders;
 use backend\Modules\Afisha\Models\Seats;
+use Core\Config;
 
 class Organizer
 {
@@ -75,7 +77,8 @@ class Organizer
 
     public static function getPoster($id)
     {
-        $query = DB::select()->from('afisha')->where('id', '=', (int)$id);
+        $query = DB::select('afisha.*', 'places.filename')->from('afisha')->join('places')
+            ->on('afisha.place_id', '=', 'places.id')->where('afisha.id', '=', (int)$id);
         return $query->find();
     }
 
@@ -161,33 +164,21 @@ class Organizer
 
 //        Header
         $sheet->mergeCells('A1:A2')
-//            ->getAlignment()
-//            ->setHorizontal(\PHPExcel_Style_Alignment::VERTICAL_CENTER)
             ->setCellValue('A1', 'Цена билета');
 
         $sheet->mergeCells('B1:C1')
-//            ->getAlignment()
-//            ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
             ->setCellValue('B1', 'Приход');
 
         $sheet->mergeCells('D1:E1')
-//            ->getAlignment()
-//            ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
             ->setCellValue('D1', 'Бронь админа');
 
         $sheet->mergeCells('F1:G1')
-//            ->getAlignment()
-//            ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
             ->setCellValue('F1', 'Бронь на сайте');
 
         $sheet->mergeCells('H1:I1')
-//            ->getAlignment()
-//            ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
             ->setCellValue('H1', 'Остаток');
 
         $sheet->mergeCells('J1:K1')
-//            ->getAlignment()
-//            ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
             ->setCellValue('J1', 'Продано');
 
         $sheet->setCellValue('B2', 'кол-во')
@@ -272,4 +263,122 @@ class Organizer
         $objWriter = new \PHPExcel_Writer_Excel5($xls);
         $objWriter->save('php://output');
     }
+
+    /*
+     * Calculate full detailed statistics for poster
+     */
+    public static function getFullDetailed($poster)
+    {
+        $prices = Prices::getList(array('afisha_id' => $poster->id, 'order_by' => 'price'));
+
+        if ($prices->count() == 0) {
+            return null;
+        }
+        $pricesIdArr = array();
+        foreach ($prices as $price) {
+            $pricesIdArr[] = $price->id;
+        }
+        $orders = Orders::getList(array('afisha_id' => $poster->id));
+
+
+        $seatsByPrices = Seats::getList(array('grouping' => 'price_id'));
+        $seats = Seats::getList(array('price_id_in' => $pricesIdArr, 'group_by' => 'view_key'));
+        $seatsArrVKey = array();
+        foreach($seats  as $seat) {
+            $seatsArrVKey[] = $seat->view_key;
+        }
+        $seatsNames = Afisha::getMapSeats($poster->filename, $seatsArrVKey);
+
+        $adminBrone = array();
+        $siteBrone = array();
+        $residue = array();
+        foreach ($seats as $key => $seat) {
+            $findedInOrders = false;
+//            Search in orders
+            foreach ($orders as $order) {
+                $orderSeats = array_filter(explode(',', $order->seats_keys));
+                if (in_array($seat->view_key, $orderSeats)) {
+                    $findedInOrders = true;
+//                    Admin brone
+                    if ($order->admin_brone == 1) {
+                        $adminBrone[$seatsNames[$seat->view_key]['row']][] = $seatsNames[$seat->view_key]['seat'];
+                    }
+//                    Site brone
+                    elseif ($order->status != 'success' &&
+                        $order->created_at > time() - Config::get('reserved_days') * 24 * 60 * 60) {
+                        $siteBrone[$seatsNames[$seat->view_key]['row']][] = $seatsNames[$seat->view_key]['seat'];
+                    }
+//                    Residue
+                    elseif ($order->status != 'success' &&
+                        $order->created_at < time() - Config::get('reserved_days') * 24 * 60 * 60) {
+                        $residue[$seatsNames[$seat->view_key]['row']][] = $seatsNames[$seat->view_key]['seat'];
+                    }
+                }
+            }
+
+            if ($findedInOrders == false) {
+                $residue[$seatsNames[$seat->view_key]['row']][] = $seatsNames[$seat->view_key]['seat'];
+            }
+        }
+
+        return array('adminBrone' => $adminBrone, 'siteBrone' => $siteBrone, 'residue' => $residue);
+    }
+
+
+    public static function getFullExcel($detailed, $poster)
+    {
+
+        $xls = new \PHPExcel();
+        $xls->setActiveSheetIndex();
+        $sheet = $xls->getActiveSheet();
+
+        $sheet->setTitle($poster->name);
+
+//        Header
+        $sheet->mergeCells('A1:F1')
+            ->setCellValue('A1', $poster->name.'('.date('d-m-Y H:i:s').')');
+
+        $sheet->mergeCells('A2:B2')
+            ->setCellValue('A2', 'Бронь админа');
+
+        $sheet->mergeCells('C2:D2')
+            ->setCellValue('C2', 'Бронь на сайте');
+
+        $sheet->mergeCells('E2:F2')
+            ->setCellValue('E2', 'Остаток');
+
+        $offset = 2;
+        $col = 0;
+        foreach ($detailed as $gName => $group) {
+            $gKey = 1;
+            foreach ( $group as $key => $seats ) {
+                $row = $offset + $gKey;
+                $gKey++;
+                $sheet->setCellValueByColumnAndRow($col, $row, $key);
+                $sheet->setCellValueByColumnAndRow($col+1, $row, implode(',', $seats));
+            }
+            $col += 2;
+        }
+
+//        Set auto width
+        foreach (range('A', $xls->getActiveSheet()->getHighestDataColumn()) as $col) {
+            $xls->getActiveSheet()
+                ->getColumnDimension($col)
+                ->setAutoSize(true);
+        }
+
+//        Save file
+        // Выводим HTTP-заголовки
+        header ( "Expires: Mon, 1 Apr 1974 05:00:00 GMT" );
+        header ( "Last-Modified: " . gmdate("D,d M YH:i:s") . " GMT" );
+        header ( "Cache-Control: no-cache, must-revalidate" );
+        header ( "Pragma: no-cache" );
+        header ( "Content-type: application/vnd.ms-excel" );
+        header ( "Content-Disposition: attachment; filename=".$poster->alias.'_'.date('d-m-Y_H:i:s').".xls" );
+
+// Выводим содержимое файла
+        $objWriter = new \PHPExcel_Writer_Excel5($xls);
+        $objWriter->save('php://output');
+    }
+
 }

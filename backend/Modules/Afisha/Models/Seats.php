@@ -26,8 +26,15 @@ class Seats
         if ($filter['price_id']) {
             $query->where('price_id', '=', $filter['price_id']);
         }
+        if ($filter['price_id_in']) {
+            $query->where('price_id', 'IN', (array)$filter['price_id_in']);
+        }
+
         if ($filter['status']) {
             $query->where('status', '=', $filter['status']);
+        }
+        if ($filter['group_by']) {
+            $query->group_by($filter['group_by']);
         }
 
         if ($filter['order_by'] && count($filter['order_by']) == 2) {
@@ -43,7 +50,11 @@ class Seats
             }
             return $result;
         } else {
-            return $query->find_all();
+            if ($filter['as_array']) {
+                return $query->as_assoc()->execute();
+            } else{
+                return $query->find_all();
+            }
         }
     }
 }

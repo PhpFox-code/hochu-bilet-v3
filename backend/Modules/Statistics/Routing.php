@@ -12,4 +12,5 @@
         'backend/organizer/inner/{id:[0-9]*}' => 'statistics/organizer/inner',
         'backend/organizer/inner/{id:[0-9]*}/page/{page:[0-9]*}' => 'statistics/organizer/inner',
         'backend/organizer/export/{id:[0-9]*}' => 'statistics/organizer/export',
+        'backend/organizer/detailed_export/{id:[0-9]*}' => 'statistics/organizer/detailed_export',
     );
