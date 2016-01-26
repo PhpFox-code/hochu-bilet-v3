@@ -131,7 +131,7 @@ class Organizer
                     if (in_array($seat, $arrPriceSeats)) {
                         if ($v->status == 'success') {
                             $soldQuantity++;
-                        } else {
+                        } elseif ($v->created_at > time() - Config::get('reserved_days') * 24 * 60 * 60) {
                             $result[$key]['site_brone_quantity']++;
                         }
                     }
@@ -269,7 +269,7 @@ class Organizer
      */
     public static function getFullDetailed($poster)
     {
-        $prices = Prices::getList(array('afisha_id' => $poster->id, 'order_by' => 'price'));
+        $prices = Prices::getList(array('afisha_id' => $poster->id));
 
         if ($prices->count() == 0) {
             return null;
@@ -278,10 +278,9 @@ class Organizer
         foreach ($prices as $price) {
             $pricesIdArr[] = $price->id;
         }
+
         $orders = Orders::getList(array('afisha_id' => $poster->id));
 
-
-        $seatsByPrices = Seats::getList(array('grouping' => 'price_id'));
         $seats = Seats::getList(array('price_id_in' => $pricesIdArr, 'group_by' => 'view_key'));
         $seatsArrVKey = array();
         foreach($seats  as $seat) {
