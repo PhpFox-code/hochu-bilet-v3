@@ -521,6 +521,7 @@
                 'creator_id' => User::info()->id,
                 'seats_keys' => implode(',', $keys),
                 'created_at' => time(),
+                'first_created_at' => time(),
                 'status' => ''     // Если нужно оформлять заказ сразу как оплаченый, нужно на 454 изменить значение
             );
             

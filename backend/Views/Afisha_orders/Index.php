@@ -95,7 +95,7 @@
                                     <!-- <td><?php #echo $obj->ip ? $obj->ip : '<span style="font-style: italic; color: #ccc;">( Администратор )</span>'; ?></td> -->
                                     <td><?php echo count(array_filter(explode(',', $obj->seats_keys))); ?></td>
                                     <td class="sum-column"><?php echo backend\Modules\Afisha\Models\Afisha::getTotalCost($obj); ?> грн</td>
-                                    <td><?php echo date( 'd.m.Y H:i', $obj->created_at ); ?></td>
+                                    <td><?php echo date( 'd.m.Y H:i', $obj->first_created_at ); ?></td>
                                     <td>
                                         <?php
                                             $status = null;

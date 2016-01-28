@@ -1,14 +1,14 @@
 <div class="rowSection clearFix row-bg">
-	<div class="col-sm-6 col-md-4">
+	<div class="col-sm-6 col-md-3">
 		<div class="statbox widget box box-shadow">
 			<div class="widgetContent">
 				<div class="visual green"><i class="fa-calendar"></i></div>
 				<div class="title">Заказ создан</div>
-				<div class="value"><?php echo date('d.m.Y H:i', $obj->created_at); ?></div>
+				<div class="value"><?php echo date('d.m.Y H:i', $obj->first_created_at); ?></div>
 			</div>
 		</div>
 	</div>
-	<div class="col-sm-6 col-md-4">
+	<div class="col-sm-6 col-md-3">
 		<div class="statbox widget box box-shadow">
 			<div class="widgetContent">
 				<div class="visual cyan"><i class="fa-money"></i></div>
@@ -17,12 +17,27 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-sm-6 col-md-4">
+	<div class="col-sm-6 col-md-3">
 		<div class="statbox widget box box-shadow">
 			<div class="widgetContent">
 				<div class="visual yellow"><i class="fa-dropbox"></i></div>
 				<div class="title">Мест в заказе</div>
 				<div class="value"><?php echo (int) count(array_filter(explode(',', $obj->seats_keys))); ?></div>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-6 col-md-3">
+		<div class="statbox widget box box-shadow">
+			<div class="widgetContent">
+				<div class="visual red"><i class="fa-clock-o"></i></div>
+				<div class="title">Бронь закончится</div>
+				<?php if($obj->status == 'success'): ?>
+					<div class="value">Заказ выкуплен</div>
+				<?php elseif ($obj->status != 'success' AND $obj->created_at < time() - Core\Config::get('reserved_days') * 24 * 60 * 60): ?>
+					<div class="value">Бронь просрочена</div>
+				<?php else: ?>
+					<div class="value"><?php echo date('d.m.Y H:i', ($obj->created_at + Core\Config::get('reserved_days') * 24 * 60 * 60)); ?></div>
+				<?php endif; ?>
 			</div>
 		</div>
 	</div>
@@ -125,6 +140,30 @@
 		</div>
 	</div>
 	<div class="col-md-5">
+		<?php if($obj->status != 'success' AND $obj->created_at > time() - Core\Config::get('reserved_days') * 24 * 60 * 60): ?>
+			<div class="widget box">
+				<div class="widgetHeader">
+					<div class="widgetTitle"><i class="fa-clock-o"></i>Продление брони</div>
+				</div>
+				<div class="widgetContent">
+					<label class="control-label">Дата время</label>
+					<div class="rowSection">
+						<div class="col-md-5">
+							<input type="text" name="date-brone" class="myPicker form-control"
+								   value="<?php echo date('d.m.Y', ($obj->created_at + Core\Config::get('reserved_days') * 24 * 60 * 60)) ?>"/>
+						</div>
+						<div class="col-md-3">
+							<input type="text" name="time-brone" class="form-control"
+								   value="<?php echo date('H:i', ($obj->created_at + Core\Config::get('reserved_days') * 24 * 60 * 60)) ?>" />
+						</div>
+						<div class="col-md-4">
+							<button class="btn btn-danger extend-brone">Продлить</button>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		<?php endif; ?>
 		<div class="widget box">
 			<?php if ($obj->is_admin && Core\User::info()->role_id == 2): ?>
 				<div class="widgetHeader"><div class="widgetTitle"><i class="fa-user"></i>Примечание</div></div>
@@ -303,6 +342,20 @@
 <span id="afishaOrderParameters" data-id="<?php echo $obj->id; ?>"></span>
 <script>
 	$(function(){
+		// init
+		var pickerInit = function( selector ) {
+			var date = $(selector).val();
+			$(selector).datepicker({
+				showOtherMonths: true,
+				selectOtherMonths: false
+			});
+			$(selector).datepicker('option', $.datepicker.regional['ru']);
+			var dateFormat = $(selector).datepicker( "option", "dateFormat" );
+			$(selector).datepicker( "option", "dateFormat", 'dd.mm.yy' );
+			$(selector).val(date);
+		}
+		pickerInit('.myPicker');
+
 		$('.print_order_tickets').closest('form[data-print-limit="true"]').submit(function(e){
 			setTimeout(function(){
 				$('.print_order_tickets').closest('form').find('input[name^="SEATS"]:checked').each(function(){

@@ -522,5 +522,39 @@ jQuery(document).ready(function($) {
                 }
             });
         });
+
+    //    Extend order
+        if ($('.extend-brone').length) {
+            $('.extend-brone').click(function(e){
+                e.preventDefault();
+                var date = $('input[name="date-brone"]').val(),
+                    time = $('input[name="time-brone"]').val(),
+                    order = $('#afishaOrderParameters').data('id');
+
+                $.ajax({
+                        url: '/backend/ajax/extendBrone',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            order: order,
+                            date : date,
+                            time : time
+                        },
+                    })
+                    .always(function(data) {
+                        if (data.success === true) {
+                            generate(data.message, 'success');
+                            if (data.reload == true) {
+                                setTimeout(function(){
+                                    location.reload();
+                                }, 3000);
+                            };
+                        }
+                        else {
+                            generate(data.message, 'danger');
+                        }
+                    });
+            });
+        }
     };
 });

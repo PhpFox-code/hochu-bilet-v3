@@ -893,6 +893,7 @@
                 'message' => $message,
                 'seats_keys' => implode(',', $places),
                 'created_at' => time(),
+                'first_created_at' => time(),
                 'updated_at' => time(),
                 'ip' => System::getRealIP()
             );

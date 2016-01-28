@@ -1111,5 +1111,36 @@
             }
         }
 
+        public function extendBroneAction(){
+            $order = (int)Arr::get($_POST, 'order');
+            $date = Arr::get($_POST, 'date');
+            $time = Arr::get($_POST, 'time');
 
+            if (!$order OR !$date OR !$time) {
+                die(json_encode(array('success' => false, 'message' => 'Ошибка получения данных')));
+            }
+
+            $tS = strtotime($date.' '.$time.':00');
+            $newTS = $tS - Config::get('reserved_days') * 24 * 60 * 60;
+
+            \Core\Common::update('afisha_orders', array('created_at' => $newTS))
+                ->where('id', '=', $order)->execute();
+
+            // Get current order
+            $afisha = DB::select()->from('afisha_orders')->where('id', '=', $order)->find();
+
+            $prices = DB::select('id')->from('prices')->where('afisha_id', '=', $afisha->afisha_id)->find_all();
+            $pricesArr = array();
+            if ($prices->count()) {
+                foreach ($prices as $key => $value) {
+                    $pricesArr[] = $value->id;
+                }
+                \Core\Common::update('seats', array('reserved_at' => $newTS))
+                    ->where('view_key', 'IN', array_filter(explode(',', $afisha->seats_keys)))
+                    ->where('price_id', 'IN', $pricesArr)
+                    ->execute();
+            }
+
+            die(json_encode(array('success' => true, 'message' => 'Данные сохранены', 'reload' => true)));
+        }
     }
