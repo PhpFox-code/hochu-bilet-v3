@@ -15,8 +15,8 @@ jQuery(document).ready(function($) {
         var button = $(this);
         var form = button.closest('.wForm');
         form.validate({
-            errorElement: "span",
-            errorClass: "wError",
+            errorElement: "label",
+            errorClass: "error",
             rules: {
                 enter_email: {email: true},
                 forget_email: {email: true},
