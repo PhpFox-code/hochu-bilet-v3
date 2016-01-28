@@ -53,8 +53,8 @@
 //            Count
             $count = DB::select(array(DB::expr('COUNT(*)'), 'count'))->from($this->tablename);
             if (User::info()->role_id != 2) { $count->where('admin_brone', '=', 0); }
-            if( $date_s !== NULL ) { $count->where( $this->tablename.'.created_at', '>=', $date_s ); }
-            if( $date_po !== NULL ) { $count->where( $this->tablename.'.created_at', '<=', $date_po + 24 * 60 * 60 - 1 ); }
+            if( $date_s !== NULL ) { $count->where( $this->tablename.'.first_created_at', '>=', $date_s ); }
+            if( $date_po !== NULL ) { $count->where( $this->tablename.'.first_created_at', '<=', $date_po + 24 * 60 * 60 - 1 ); }
             if( $status !== NULL ) {
                 switch ($status) {
                     case 'brone':
@@ -85,18 +85,18 @@
             $result = DB::select($this->tablename.'.*', array('users.name', 'creator_name'))->from($this->tablename)
                 ->join('users', 'LEFT OUTER')
                     ->on('users.id', '=', $this->tablename.'.creator_id');
-            if( $date_s ) { $result->where( $this->tablename.'.created_at', '>=', $date_s ); }
-            if( $date_po ) { $result->where( $this->tablename.'.created_at', '<=', $date_po + 24 * 60 * 60 - 1 ); }
+            if( $date_s ) { $result->where( $this->tablename.'.first_created_at', '>=', $date_s ); }
+            if( $date_po ) { $result->where( $this->tablename.'.first_created_at', '<=', $date_po + 24 * 60 * 60 - 1 ); }
 //            if (User::info()->role_id != 2) { $result->where($this->tablename.'.creator_id', '=', User::info()->id);}
             if (User::info()->role_id != 2) { $result->where('admin_brone', '=', 0); }
             if( $status !== NULL ) {
                 switch ($status) {
                     case 'brone':
-                        $result->where($this->tablename.'.created_at', '>', time() - Config::get('reserved_days') * 24 * 60 * 60)
+                        $result->where($this->tablename.'.first_created_at', '>', time() - Config::get('reserved_days') * 24 * 60 * 60)
                             ->where($this->tablename.'.status', '!=', 'success');
                         break;
                     case 'expired':
-                        $result->where($this->tablename.'.created_at', '<', time() - Config::get('reserved_days') * 24 * 60 * 60)
+                        $result->where($this->tablename.'.first_created_at', '<', time() - Config::get('reserved_days') * 24 * 60 * 60)
                             ->and_where_open()
                                 ->where($this->tablename.'.status', '!=', 'success')
                                 ->or_where($this->tablename.'.status', 'is', null)
@@ -111,7 +111,7 @@
                 $result->where( $this->tablename.'.afisha_id', '=', $eventId );
             if ($creatorId)
                 $result->where( $this->tablename.'.creator_id', '=', $creatorId );
-            $result = $result->order_by($this->tablename.'.created_at', 'DESC')
+            $result = $result->order_by($this->tablename.'.first_created_at', 'DESC')
                 ->limit($this->limit)->offset(($page - 1) * $this->limit)->find_all();
 
 //            Creators
