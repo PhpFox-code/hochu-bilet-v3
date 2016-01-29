@@ -86,7 +86,7 @@
 	    	</div>
 	    <?php endforeach ?>
 	<?php endif ?>
-    <style type="text/css">
+<style type="text/css">
 		/*-------------------------------  reset  ------------------------------------*/
 	    a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,caption,center,cite,code,dd,del,details,dfn,div,dl,dt,em,embed,
 	    fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,output,
@@ -121,18 +121,20 @@
 	        thead {display: table-header-group;}
 	        tr, img {page-break-inside: avoid;}
 	        img {max-width: 100% !important;}
-	        @page {
-	            margin: 0.5cm;
-	        }
+
+            @page {margin: 0cm 15.5cm 46cm 0cm; }
 	        p, h2, h3 {orphans: 3; widows: 3;}
 	        h2, h3 {page-break-after: avoid;}
-	    }
+            .one-page {
+                page-break-after: always;
+            }
+    }
 
 	    .one-page {
 	    	position: relative;
 	    	height: 730px;
 			margin-bottom: 300px;
-	    }	
+	    }
 	    .wrapper {
 	        width: 730px;
 	        height: 243px;
@@ -212,7 +214,7 @@
 	    .barCode {
 	        position: absolute;
 		    top: 134px;
-		    right: -84px;
+		    right: -74px;
 	        -webkit-transform: rotate(90deg);
 	        -moz-transform: rotate(90deg) ;
 	        -ms-transform: rotate(90deg);
@@ -221,7 +223,7 @@
 	    .wImg {
 	        line-height: 0;
 	        text-align: center;
-	        max-width: 220px;
+	        max-width: 200px;
 	        height: 20px;
 	    }
 	    .controlInfo {
@@ -238,7 +240,7 @@
 			margin: 0 0 2px;
 	    }
 	    .controlInfo.two {
-			left: -51px;
+			left: -56px;
 	    }
 	    .controlInfo .barcodeText {
 	        text-align: left;
@@ -287,7 +289,7 @@
 			text-align: center;
 			position: absolute;
 			bottom: 0px;
-			padding: 0 0 0 14px;
+			padding: 0 0 0 10px;
 			width: 100%;
 			font: bold 15px Arial, Helvetica, sans-serif;
 	    }
