@@ -111,7 +111,8 @@
                 $result->where( $this->tablename.'.afisha_id', '=', $eventId );
             if ($creatorId)
                 $result->where( $this->tablename.'.creator_id', '=', $creatorId );
-            $result = $result->order_by($this->tablename.'.created_at', 'DESC')
+
+            $result = $result->order_by($this->tablename.'.id', 'DESC')
                 ->limit($this->limit)->offset(($page - 1) * $this->limit)->find_all();
 
 //            Creators
