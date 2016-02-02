@@ -53,14 +53,15 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <?php $get = explode('?', $_SERVER['REQUEST_URI']); $get = $get[1]; ?>
                             <?php foreach ( $result as $el ): ?>
                                 <?php $obj = $el['user']; ?>
                                 <tr data-id="<?php echo $obj->id; ?>">
                                     <td class="hidden-ss">
-                                        <a href="/backend/cassier/inner/<?php echo $obj->id .'?'. explode('?', $_SERVER['REQUEST_URI'])[1]; ?>"><?php echo $obj->id; ?></a>
+                                        <a href="/backend/cassier/inner/<?php echo $obj->id .'?'. $get; ?>"><?php echo $obj->id; ?></a>
                                     </td>
                                     <td>
-                                        <a href="/backend/cassier/inner/<?php echo $obj->id .'?'. explode('?', $_SERVER['REQUEST_URI'])[1]; ?>"><?php echo $obj->name; ?></a>
+                                        <a href="/backend/cassier/inner/<?php echo $obj->id .'?'. $get; ?>"><?php echo $obj->name; ?></a>
                                     </td>
                                     <td>
                                         <?php if ($obj->email): ?>
@@ -81,7 +82,7 @@
                                     <td><?php echo $el['countSeats']; ?></td>
                                     <td class="sum-column"><?php echo $el['totalPrice'] ?> грн</td>
                                     <td>
-                                        <a href="/backend/cassier/inner/<?php echo $obj->id .'?'. explode('?', $_SERVER['REQUEST_URI'])[1];?>" title="Подробно">Подробно</a>
+                                        <a href="/backend/cassier/inner/<?php echo $obj->id .'?'. $get;?>" title="Подробно">Подробно</a>
                                     </td>
                                 </tr>
                             <?php endforeach ?>
