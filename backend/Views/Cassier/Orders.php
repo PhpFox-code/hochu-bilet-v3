@@ -61,7 +61,7 @@
             <td><?php echo $obj->admin_comment ?></td>
             <td><?php echo $places; ?></td>
             <td class="sum-column"><?php echo $cost; ?> грн</td>
-            <td><?php echo date( 'd.m.Y H:i', $obj->created_at ); ?></td>
+            <td><?php echo date( 'd.m.Y H:i', $obj->payed_at ); ?></td>
             <td>
                 <span class="label label-<?php echo $class; ?> orderLabelStatus">
                     <span class="hidden-ss">

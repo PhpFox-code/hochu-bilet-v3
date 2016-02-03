@@ -60,6 +60,7 @@
 							<div class="">
 								<span>Принял оплату:</span>
 								<a href="/backend/users/edit/<?php echo $payer->id; ?>"><?php echo $payer->name; ?></a>
+								<span>(<?php echo date('d.m.Y H:i', $obj->payed_at); ?>)</span>
 							</div>
 						<?php endif; ?>
 						<?php if($obj->status != 'success' AND $obj->created_at < time() - Core\Config::get('reserved_days') * 24 * 60 * 60): ?>

@@ -63,7 +63,7 @@ class Cassier
             $sheet->setCellValueByColumnAndRow(1, $row, $afisha->name);
             $sheet->setCellValueByColumnAndRow(2, $row, $places);
             $sheet->setCellValueByColumnAndRow(3, $row, number_format($cost, 0, '.', ' ').' грн');
-            $sheet->setCellValueByColumnAndRow(4, $row, date( 'd.m.Y H:i', $obj->created_at ));
+            $sheet->setCellValueByColumnAndRow(4, $row, date( 'd.m.Y H:i', $obj->payed_at ));
 
             $sheet->setCellValueByColumnAndRow(5, $row, $status);
 
