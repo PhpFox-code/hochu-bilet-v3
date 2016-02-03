@@ -137,7 +137,7 @@ class Organizer
                     }
                 }
             }
-            $result[$key]['site_brone_sum'] = $result[$key]['site_brone_sum'] * $price->price;
+            $result[$key]['site_brone_sum'] = $result[$key]['site_brone_quantity'] * $price->price;
 
 //            Residue
             $result[$key]['residue_quantity'] = $result[$key]['coming_quantity'] - $result[$key]['admin_brone_quantity'] - $result[$key]['site_brone_quantity'] - $soldQuantity;
