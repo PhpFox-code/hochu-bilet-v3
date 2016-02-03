@@ -935,14 +935,41 @@
 
             $afisha = DB::select()->from('afisha_orders')->where('id', '=', (int)$afisha_id)->find();
             $prices = DB::select('id')->from('prices')->where('afisha_id', '=', $afisha->afisha_id)->find_all();
+            $keys = (array)array_filter(explode(',', $list_keys));
             $pricesArr = array();
             if (count($prices)) {
                 foreach ($prices as $key => $value) {
                     $pricesArr[] = $value->id;
                 }
-                $res2 = \Core\Common::update('seats', array('status' => 1, 'reserved_at' => DB::expr(NULL)))
+//                Reset old seats
+                \Core\Common::update('seats', array('status' => 1, 'reserved_at' => DB::expr(NULL)))
                     ->where('view_key', 'IN', array_filter(explode(',', $afisha->seats_keys)))
                     ->where('price_id', 'IN', $pricesArr)
+                    ->execute();
+
+//                Write new seats
+                // Generate seats id from places list
+                $seats = DB::select('id')
+                    ->from('seats')
+                    ->where('view_key', 'IN', $keys)
+                    ->where('price_id', 'IN', $pricesArr)
+                    ->and_where_open()
+                    ->where('status', '=', 1)
+                    ->or_where_open()
+                    ->where('status', '=', 2)
+                    ->where('reserved_at', '<', time() - (60 * 60 *24 * Config::get('reserved_days')) )
+                    ->or_where_close()
+                    ->and_where_close()
+                    ->find_all();
+
+                $seatsId = array();
+                foreach ($seats as $seat) {
+                    $seatsId[] = $seat->id;
+                }
+
+                DB::update('seats')
+                    ->set(array('status' => 2, 'reserved_at' => time()))
+                    ->where('id', 'IN', $seatsId)
                     ->execute();
             }
 
